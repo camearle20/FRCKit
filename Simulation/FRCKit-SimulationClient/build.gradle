@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+group 'frckit'
+
+dependencies {
+    implementation project(":Libraries:FRCKit-DI")
+    implementation project(":Simulation:FRCKit-SimulationCommon")
+}

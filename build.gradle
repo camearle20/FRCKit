@@ -1,0 +1,26 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.0' apply false
+}
+
+def wpilibVersion = "2020.3.2"
+
+allprojects {
+    group 'frckit'
+}
+
+subprojects {
+    apply plugin: "java-library"
+
+    repositories {
+        mavenCentral()
+
+        maven {
+            url "https://frcmaven.wpi.edu/artifactory/release"
+        }
+    }
+
+    dependencies {
+        implementation "edu.wpi.first.wpilibj:wpilibj-java:$wpilibVersion"
+        implementation "edu.wpi.first.hal:hal-java:$wpilibVersion"
+    }
+}

@@ -1,0 +1,13 @@
+
+dependencies {
+    implementation project(":Simulation:FRCKit-SimulationServerCommon")
+    compileOnly files("lib/Controller.jar")
+}
+
+jar {
+    archiveFileName = "SimulationServerWebots.jar"
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

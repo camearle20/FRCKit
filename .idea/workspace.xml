@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dfe5f0f4-866e-4a63-82be-76b7d9ce0987" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Libraries/FRCKit-DI/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Libraries/FRCKit-DI/src/main/java/frckit/launch/RobotLauncher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/launch/ExternalSimLauncher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/SimulationClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/SimulationGlobals.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimSimpleMotorController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimSmartMotorController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimStandaloneEncoder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimTimer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimTransmissionEncoder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationCommon/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationCommon/src/main/java/frckit/simulation/protocol/RobotCycleMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationCommon/src/main/java/frckit/simulation/protocol/WorldUpdateMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/SimulationServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/modelconfig/ConfigurationLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/modelconfig/ModelConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/modelconfig/SensorConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/modelconfig/TransmissionConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/physics/DCTransmissionModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/lib/Controller.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/SimulationServerWebots.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/frckit/simulation/webots/WebotsMotorUnion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Simulation/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/Simulation">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/Libraries/FRCKit-DI">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="FRCKit" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="FRCKit" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="FRCKit" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Users\cameronearle\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\202.6397.94\plugins\maven\lib\maven3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1hAYM4Rg0uoIU51OwK91SXAwBLK" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\cameronearle\Documents\Projects\FRCKit\Simulation\FRCKit-SimulationServerCommon\src\main\java\frckit\simulation" />
+      <recent name="C:\Users\cameronearle\Documents\Projects\FRCKit\Simulation\FRCKit-SimulationServerWebots\lib" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="frckit.simulation.physics" />
+      <recent name="frckit.simulation.webots" />
+      <recent name="frckit.simulation" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\cameronearle\Documents\Projects\FRCKit\Simulation" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.FRCKit [jar]">
+    <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="frckit.test" />
+      <module name="FRCKit.Libraries.FRCKit-DI.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="frckit.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FRCKit [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="FRCKit:Libraries:FRCKit-DI [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Libraries/FRCKit-DI" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.FRCKit [jar]" />
+        <item itemvalue="Gradle.FRCKit:Libraries:FRCKit-DI [jar]" />
+        <item itemvalue="Application.test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dfe5f0f4-866e-4a63-82be-76b7d9ce0987" name="Default Changelist" comment="" />
+      <created>1599455313462</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1599455313462</updated>
+      <workItem from="1599455315253" duration="512000" />
+      <workItem from="1599455844800" duration="1695000" />
+      <workItem from="1599523378189" duration="1145000" />
+      <workItem from="1599608065057" duration="598000" />
+      <workItem from="1599621664791" duration="1374000" />
+      <workItem from="1599623400376" duration="2342000" />
+      <workItem from="1599625779446" duration="5399000" />
+      <workItem from="1599669394891" duration="1659000" />
+      <workItem from="1599779059256" duration="44000" />
+      <workItem from="1599779115664" duration="7470000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="578" y="177" key="#Project_Structure" timestamp="1599794703469">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state x="578" y="177" key="#Project_Structure/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599794703469" />
+    <state x="270" y="34" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1599623862324">
+      <screen x="0" y="0" width="1280" height="689" />
+    </state>
+    <state x="270" y="34" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1280.689@0.0.1280.689" timestamp="1599623862324" />
+    <state width="2151" height="335" key="GridCell.Tab.0.bottom" timestamp="1599796338288">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state width="2151" height="335" key="GridCell.Tab.0.bottom/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599796338288" />
+    <state width="1237" height="166" key="GridCell.Tab.0.bottom/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
+    <state width="2151" height="335" key="GridCell.Tab.0.center" timestamp="1599796338287">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state width="2151" height="335" key="GridCell.Tab.0.center/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599796338287" />
+    <state width="1237" height="166" key="GridCell.Tab.0.center/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
+    <state width="2151" height="335" key="GridCell.Tab.0.left" timestamp="1599796338287">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state width="2151" height="335" key="GridCell.Tab.0.left/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599796338287" />
+    <state width="1237" height="166" key="GridCell.Tab.0.left/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
+    <state width="2151" height="335" key="GridCell.Tab.0.right" timestamp="1599796338287">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state width="2151" height="335" key="GridCell.Tab.0.right/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599796338287" />
+    <state width="1237" height="166" key="GridCell.Tab.0.right/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
+    <state x="355" y="0" key="new project wizard" timestamp="1599794642733">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state x="355" y="0" key="new project wizard/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599794642733" />
+    <state x="207" y="0" key="new project wizard/0.0.1280.689@0.0.1280.689" timestamp="1599457291787" />
+    <state x="519" y="17" width="1152" height="1185" key="search.everywhere.popup" timestamp="1599794870887">
+      <screen x="0" y="0" width="2194" height="1204" />
+    </state>
+    <state x="519" y="17" width="1152" height="1185" key="search.everywhere.popup/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599794870887" />
+    <state x="303" y="10" width="672" height="678" key="search.everywhere.popup/0.0.1280.689@0.0.1280.689" timestamp="1599630497851" />
+  </component>
+</project>

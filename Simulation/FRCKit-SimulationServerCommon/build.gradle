@@ -1,0 +1,7 @@
+
+def gsonVersion = "2.8.6"
+
+dependencies {
+    api project(":Simulation:FRCKit-SimulationCommon")
+    implementation "com.google.code.gson:gson:$gsonVersion"
+}
