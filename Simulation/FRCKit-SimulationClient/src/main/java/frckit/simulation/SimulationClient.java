@@ -1,35 +1,55 @@
 package frckit.simulation;
 
-import frckit.simulation.protocol.RobotCycleMessage;
-import frckit.simulation.protocol.WorldUpdateMessage;
+import frckit.simulation.protocol.RobotCycle;
+import frckit.simulation.protocol.WorldUpdate;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class SimulationClient {
-    private final ObjectOutputStream out;
-    private final ObjectInputStream in;
+    private final OutputStream out;
+    private final InputStream in;
 
-    public WorldUpdateMessage receiveUpdateMessage() {
+    //Store the last instance so that device classes can get access
+    private static SimulationClient lastInstance = null;
+
+    public static SimulationClient getInstance() {
+        if (lastInstance == null) {
+            throw new RuntimeException("No simulation client connected!  Did you use ExternalSimLauncher to launch your robot?");
+        }
+        return lastInstance;
+    }
+
+    private WorldUpdate.WorldUpdateMessage lastWorldUpdate = null;
+    private RobotCycle.RobotCycleMessage.Builder currentCycleBuilder = null;
+
+    public WorldUpdate.WorldUpdateMessage getLastWorldUpdate() {
+        return lastWorldUpdate;
+    }
+
+    public RobotCycle.RobotCycleMessage.Builder getCurrentCycleBuilder() {
+        return currentCycleBuilder;
+    }
+
+    public WorldUpdate.WorldUpdateMessage receiveUpdateMessage() {
         try {
-            Object update = in.readObject();
-            if (update instanceof WorldUpdateMessage) {
-                return (WorldUpdateMessage) update;
-            } else {
-                throw new RuntimeException("Invalid message type '" + update.getClass().getName() + "' from server");
-            }
-        } catch (IOException | ClassNotFoundException e) {
+            //Get and store update from simulator
+            WorldUpdate.WorldUpdateMessage messageIn = WorldUpdate.WorldUpdateMessage.parseDelimitedFrom(in);
+            lastWorldUpdate = messageIn;
+            return messageIn;
+        } catch (IOException e) {
             throw new RuntimeException("Invalid message from server", e);
         }
     }
 
-    public void sendCycleMessage(RobotCycleMessage message) {
+    public void createNewCycleBuilder() {
+        //Create a new robotCycle message builder for this cycle
+        currentCycleBuilder = RobotCycle.RobotCycleMessage.newBuilder();
+    }
+
+    public void sendCycleMessage() {
         try {
-            out.writeObject(message);
-            out.flush();
-            out.reset();
+            currentCycleBuilder.build().writeDelimitedTo(out);
         } catch (IOException e) {
             throw new RuntimeException("Error sending message to server", e);
         }
@@ -38,10 +58,11 @@ public class SimulationClient {
     public SimulationClient(String serverAddress, int serverPort) {
         try {
             Socket socket = new Socket(serverAddress, serverPort);
-            this.out = new ObjectOutputStream(socket.getOutputStream());
-            this.in = new ObjectInputStream(socket.getInputStream());
+            this.out = socket.getOutputStream();
+            this.in = socket.getInputStream();
         } catch (IOException e) {
             throw new RuntimeException("Unable to connect to server", e);
         }
+        lastInstance = this;
     }
 }

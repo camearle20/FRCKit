@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package frckit.simulation.protocol;
+
+message RobotCycleMessage {
+  bool resetWorldFlag = 1;
+  bool isEnabled = 2;
+
+  map<int32, MotorCommand> motorCommands = 3;
+  map<int32, PneumaticsCommand> pneumaticsCommands = 4;
+}
+
+message MotorCommand {
+  enum ControlType {
+    NONE = 0;
+    POSITION = 1;
+    VELOCITY = 2;
+  }
+
+  ControlType controlType = 1;
+  double command = 2;
+  double voltage = 3;
+}
+
+message PneumaticsCommand {
+  bool state = 1;
+}

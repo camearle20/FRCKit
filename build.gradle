@@ -6,6 +6,7 @@ def wpilibVersion = "2020.3.2"
 
 allprojects {
     group 'frckit'
+    apply plugin: 'idea'
 }
 
 subprojects {

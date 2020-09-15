@@ -1,0 +1,16 @@
+plugins {
+    id "com.google.protobuf" version "0.8.13"
+}
+
+def protobufVersion = "3.13.0"
+
+dependencies {
+    api "com.google.protobuf:protobuf-java:$protobufVersion"
+}
+
+protobuf {
+    protoc {
+        // The artifact spec for the Protobuf Compiler
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
+    }
+}

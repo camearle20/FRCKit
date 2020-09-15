@@ -1,20 +1,19 @@
 package frckit.simulation.devices;
 
-import frckit.simulation.SimulationGlobals;
+import frckit.simulation.SimulationClient;
 
 public class SimTransmissionEncoder {
     private int slot;
 
     public SimTransmissionEncoder(int slot) {
         this.slot = slot;
-        SimulationGlobals.registerMotor(slot);
     }
 
     public double getPositionRadians() {
-        return SimulationGlobals.worldUpdate.transmission_positions[slot];
+        return SimulationClient.getInstance().getLastWorldUpdate().getTransmissionEncoderStatesOrThrow(slot).getPosition();
     }
 
     public double getVelocityRadPerSec() {
-        return SimulationGlobals.worldUpdate.transmission_velocities[slot];
+        return SimulationClient.getInstance().getLastWorldUpdate().getTransmissionEncoderStatesOrThrow(slot).getVelocity();
     }
 }

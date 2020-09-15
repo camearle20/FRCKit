@@ -1,6 +1,7 @@
 package frckit.simulation.devices;
 
-import frckit.simulation.SimulationGlobals;
+
+import frckit.simulation.SimulationClient;
 
 public class SimStandaloneEncoder {
     private int slot;
@@ -10,10 +11,10 @@ public class SimStandaloneEncoder {
     }
 
     public double getPositionRadians() {
-        return SimulationGlobals.worldUpdate.encoder_positions[slot];
+        return SimulationClient.getInstance().getLastWorldUpdate().getStandaloneEncoderStatesOrThrow(slot).getPosition();
     }
 
     public double getVelocityRadPerSec() {
-        return SimulationGlobals.worldUpdate.encoder_velocities[slot];
+        return SimulationClient.getInstance().getLastWorldUpdate().getStandaloneEncoderStatesOrThrow(slot).getVelocity();
     }
 }

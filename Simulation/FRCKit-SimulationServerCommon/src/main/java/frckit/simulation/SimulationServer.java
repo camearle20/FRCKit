@@ -1,11 +1,9 @@
 package frckit.simulation;
 
-import frckit.simulation.protocol.RobotCycleMessage;
-import frckit.simulation.protocol.WorldUpdateMessage;
+import frckit.simulation.protocol.RobotCycle;
+import frckit.simulation.protocol.WorldUpdate;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,8 +19,11 @@ import java.util.concurrent.SynchronousQueue;
 public class SimulationServer {
     private int port;
     private ClientHandler currentHandler;
-    private BlockingQueue<WorldUpdateMessage> sendQueue = new SynchronousQueue<>();
-    private BlockingQueue<RobotCycleMessage> recvQueue = new SynchronousQueue<>();
+    private final BlockingQueue<WorldUpdate.WorldUpdateMessage> sendQueue = new SynchronousQueue<>();
+    private final BlockingQueue<RobotCycle.RobotCycleMessage> recvQueue = new SynchronousQueue<>();
+    private static final RobotCycle.RobotCycleMessage WORLD_RESET = RobotCycle.RobotCycleMessage.newBuilder()
+            .setResetWorldFlag(true)
+            .build();
 
     private final Thread acceptClientsThread = new Thread(() -> {
         try {
@@ -44,7 +45,7 @@ public class SimulationServer {
                 }
                 recvQueue.poll(); //Clear receive queue
                 sendQueue.poll(); //Clear send queue
-                recvQueue.put(RobotCycleMessage.WORLD_RESET);
+                recvQueue.put(WORLD_RESET);
                 currentHandler = new ClientHandler(newClient); //Create and start the new client handler
                 currentHandler.start();
             }
@@ -69,25 +70,19 @@ public class SimulationServer {
         @Override
         public void run() {
             try {
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                OutputStream out = socket.getOutputStream();
+                InputStream in = socket.getInputStream();
 
                 while (!interrupted()) {
                     //Accept a world update from the queue
-                    WorldUpdateMessage message = sendQueue.take();
+                    WorldUpdate.WorldUpdateMessage message = sendQueue.take();
                     //Send the message to the client
-                    out.writeObject(message);
-                    out.flush();
-                    out.reset(); //Needed since ObjectOutputStream tracks reference ID and does not reserialize our reused instance each cycle
+                    message.writeDelimitedTo(out);
                     //Retrieve data from client
-                    Object response = in.readObject();
-                    if (response instanceof RobotCycleMessage) {
-                        RobotCycleMessage cycleMessage = (RobotCycleMessage) response;
-                        //Put cycle message in the queue
-                        recvQueue.put(cycleMessage);
-                    }
+                    RobotCycle.RobotCycleMessage response = RobotCycle.RobotCycleMessage.parseDelimitedFrom(in);
+                    recvQueue.put(response);
                 }
-            } catch (IOException | InterruptedException | ClassNotFoundException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
             if (!interrupted()) {
@@ -127,11 +122,11 @@ public class SimulationServer {
         System.out.println("Client '" + addr.getCanonicalHostName() + "' disconnected");
     }
 
-    public void sendWorldUpdate(WorldUpdateMessage message) throws InterruptedException {
+    public void sendWorldUpdate(WorldUpdate.WorldUpdateMessage message) throws InterruptedException {
         sendQueue.put(message);
     }
 
-    public RobotCycleMessage getRobotCycleMessage() throws InterruptedException {
+    public RobotCycle.RobotCycleMessage getRobotCycleMessage() throws InterruptedException {
         return recvQueue.take();
     }
 

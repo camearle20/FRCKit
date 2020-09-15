@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package frckit.simulation.protocol;
+
+message WorldUpdateMessage {
+  double timestamp = 1;
+
+  map<int32, EncoderState> transmissionEncoderStates = 2;
+  map<int32, EncoderState> standaloneEncoderStates = 3;
+
+  map<int32, VisionState> visionStates = 4;
+}
+
+message EncoderState {
+  double position = 1;
+  double velocity = 2;
+}
+
+message VisionState {
+  bool tv = 1;
+  double tx = 2;
+  double ty = 3;
+  repeated double tcornxy = 4;
+}

@@ -9,9 +9,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobotBase;
 import edu.wpi.first.wpilibj.RobotBase;
 import frckit.simulation.SimulationClient;
-import frckit.simulation.SimulationGlobals;
-import frckit.simulation.protocol.RobotCycleMessage;
-import frckit.simulation.protocol.WorldUpdateMessage;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -69,9 +66,10 @@ public class ExternalSimLauncher {
 
             //Run the code forever
             while (!Thread.interrupted()) {
-                SimulationGlobals.worldUpdate = client.receiveUpdateMessage(); //This blocks until webots is ready
+                client.receiveUpdateMessage(); //This blocks until webots is ready
+                client.createNewCycleBuilder(); //Create a new cycle message for this cycle
                 loopFunc.invoke(robot); //This is the same as "robot.loopFunc()" but using reflection
-                client.sendCycleMessage(SimulationGlobals.cycleMessage); //Send the response
+                client.sendCycleMessage(); //Send the response
             }
         } catch (Throwable throwable) {
             Throwable cause = throwable.getCause();

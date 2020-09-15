@@ -8,3 +8,9 @@ dependencies {
     implementation project(":Libraries:FRCKit-DI")
     implementation project(":Simulation:FRCKit-SimulationCommon")
 }
+
+    jar{
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

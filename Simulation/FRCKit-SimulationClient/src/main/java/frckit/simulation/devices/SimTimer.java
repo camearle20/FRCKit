@@ -1,11 +1,11 @@
 package frckit.simulation.devices;
 
-import frckit.simulation.SimulationGlobals;
+import frckit.simulation.SimulationClient;
 
 public class SimTimer {
     private SimTimer() {} //no instances
 
     public static double getTimestampSeconds() {
-        return SimulationGlobals.worldUpdate.timestamp;
+        return SimulationClient.getInstance().getLastWorldUpdate().getTimestamp();
     }
 }

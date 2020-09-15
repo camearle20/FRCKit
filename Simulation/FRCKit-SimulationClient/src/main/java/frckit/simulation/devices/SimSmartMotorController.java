@@ -1,26 +1,35 @@
 package frckit.simulation.devices;
 
-import frckit.simulation.SimulationGlobals;
-import frckit.simulation.protocol.RobotCycleMessage;
+import frckit.simulation.SimulationClient;
+import frckit.simulation.protocol.RobotCycle;
 
 public class SimSmartMotorController {
     private final int slot;
 
     public SimSmartMotorController(int slot) {
         this.slot = slot;
-        SimulationGlobals.registerMotor(slot);
     }
 
     public void setOutputVoltage(double voltage) {
-        SimulationGlobals.cycleMessage.motors_controlTypes[slot] = RobotCycleMessage.MotorControlTypes.VOLTAGE;
-        SimulationGlobals.cycleMessage.motors_setpoints[slot] = 0.0;
-        SimulationGlobals.cycleMessage.motors_voltages[slot] = voltage;
+        RobotCycle.RobotCycleMessage.Builder builder = SimulationClient.getInstance().getCurrentCycleBuilder();
+        builder.putMotorCommands(slot,
+                RobotCycle.MotorCommand.newBuilder()
+                        .setControlType(RobotCycle.MotorCommand.ControlType.NONE)
+                        .setCommand(0.0)
+                        .setVoltage(voltage)
+                        .build()
+        );
     }
 
     public void setVelocitySetpoint(double velocityRadPerSec, double ffVolts) {
-        SimulationGlobals.cycleMessage.motors_controlTypes[slot] = RobotCycleMessage.MotorControlTypes.VELOCITY;
-        SimulationGlobals.cycleMessage.motors_setpoints[slot] = velocityRadPerSec;
-        SimulationGlobals.cycleMessage.motors_voltages[slot] = ffVolts;
+        RobotCycle.RobotCycleMessage.Builder builder = SimulationClient.getInstance().getCurrentCycleBuilder();
+        builder.putMotorCommands(slot,
+                RobotCycle.MotorCommand.newBuilder()
+                        .setControlType(RobotCycle.MotorCommand.ControlType.VELOCITY)
+                        .setCommand(velocityRadPerSec)
+                        .setVoltage(ffVolts)
+                        .build()
+        );
     }
 
     public void setVelocitySetpoint(double velocityRadPerSec) {
@@ -28,9 +37,14 @@ public class SimSmartMotorController {
     }
 
     public void setPositionSetpoint(double positionRadians, double ffVolts) {
-        SimulationGlobals.cycleMessage.motors_controlTypes[slot] = RobotCycleMessage.MotorControlTypes.POSITION;
-        SimulationGlobals.cycleMessage.motors_setpoints[slot] = positionRadians;
-        SimulationGlobals.cycleMessage.motors_voltages[slot] = ffVolts;
+        RobotCycle.RobotCycleMessage.Builder builder = SimulationClient.getInstance().getCurrentCycleBuilder();
+        builder.putMotorCommands(slot,
+                RobotCycle.MotorCommand.newBuilder()
+                        .setControlType(RobotCycle.MotorCommand.ControlType.POSITION)
+                        .setCommand(positionRadians)
+                        .setVoltage(ffVolts)
+                        .build()
+        );
     }
 
     public void setPositionSetpoint(double positionRadians) {

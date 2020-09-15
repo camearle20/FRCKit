@@ -2,6 +2,7 @@ package frckit.simulation.webots;
 
 import com.cyberbotics.webots.controller.Motor;
 import com.cyberbotics.webots.controller.PositionSensor;
+import frckit.simulation.modelconfig.SensorConfig;
 import frckit.simulation.modelconfig.TransmissionConfig;
 import frckit.simulation.physics.DCTransmissionModel;
 
@@ -13,29 +14,14 @@ import frckit.simulation.physics.DCTransmissionModel;
  * The user code is then presented with the data, executes a step, and provides voltages back.
  * After this is complete, the voltages are run through the model, turned to torques, and sent to Webots.
  */
-public class WebotsMotorUnion {
+public class WebotsTransmission {
     private final Motor motor;
-    private final PositionSensor sensor;
     private final DCTransmissionModel model;
+    public final WebotsEncoder encoder;
 
-    private double lastTimestamp; //Used to calculate velocity
-    private double lastPosition;
-
-    public double getPosition() {
-        return position;
-    }
-
-    public double getVelocity() {
-        return velocity;
-    }
-
-    private double position;
-    private double velocity;
-
-    public WebotsMotorUnion(Motor motor, PositionSensor sensor, TransmissionConfig transmissionConfig) {
+    public WebotsTransmission(Motor motor, PositionSensor sensor, TransmissionConfig transmissionConfig) {
         transmissionConfig.loadMotorValues();
         this.motor = motor;
-        this.sensor = sensor;
         this.model = new DCTransmissionModel(
                 transmissionConfig.motorSpeedPerVolt,
                 transmissionConfig.motorTorquePerVolt,
@@ -44,6 +30,7 @@ public class WebotsMotorUnion {
                 transmissionConfig.numMotors,
                 transmissionConfig.motorToOutputRatio
         );
+        this.encoder = new WebotsEncoder(sensor, transmissionConfig.sensor.resolution);
     }
 
     /**
@@ -51,13 +38,7 @@ public class WebotsMotorUnion {
      * @param timestamp The simulation timestamp
      */
     public void updateSensors(double timestamp) {
-        double dt = timestamp - lastTimestamp;
-        lastTimestamp = timestamp;
-
-        //Read sensor data
-        position = sensor.getValue();
-        velocity = (position - lastPosition) / dt;
-        lastPosition = position;
+        encoder.update(timestamp);
     }
 
     /**
@@ -65,6 +46,7 @@ public class WebotsMotorUnion {
      * @param voltage The voltage applied to the motor
      */
     public void applyTorque(double voltage) {
+        double velocity = encoder.getVelocity();
         double torque = model.simulate(voltage, velocity);
         motor.setTorque(torque);
     }
