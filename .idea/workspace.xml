@@ -22,23 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfe5f0f4-866e-4a63-82be-76b7d9ce0987" name="Default Changelist" comment="Modified simulation to use protobuf instead of Java serialization.  Improves performance and scalability of code in the future.">
-      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationCommon/src/main/java/test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/control/PIDController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/launch/ExternalSimLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/launch/ExternalSimLauncher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/SimulationClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/SimulationClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimSimpleMotorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimSimpleMotorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimSmartMotorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimSmartMotorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimStandaloneEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimStandaloneEncoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimTransmissionEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationClient/src/main/java/frckit/simulation/devices/SimTransmissionEncoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationCommon/src/main/proto/frckit/simulation/protocol/robot_cycle.proto" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationCommon/src/main/proto/frckit/simulation/protocol/robot_cycle.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/physics/DCTransmissionModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerCommon/src/main/java/frckit/simulation/physics/DCTransmissionModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/SimulationServerWebots.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/SimulationServerWebots.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/frckit/simulation/webots/WebotsEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/frckit/simulation/webots/WebotsEncoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/frckit/simulation/webots/WebotsTransmission.java" beforeDir="false" afterPath="$PROJECT_DIR$/Simulation/FRCKit-SimulationServerWebots/src/main/java/frckit/simulation/webots/WebotsTransmission.java" afterDir="false" />
-    </list>
+    <list default="true" id="dfe5f0f4-866e-4a63-82be-76b7d9ce0987" name="Default Changelist" comment="Added hardware PID control and fixed a bug where resetting did not work properly" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -200,17 +184,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="FRCKit [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -323,7 +296,7 @@
       <workItem from="1600144825326" duration="1226000" />
       <workItem from="1600210261082" duration="11703000" />
       <workItem from="1600229866357" duration="235000" />
-      <workItem from="1600230166763" duration="6308000" />
+      <workItem from="1600230166763" duration="6488000" />
     </task>
     <task id="LOCAL-00001" summary="Ported simulator code into FRCKit">
       <created>1599798934294</created>
@@ -339,7 +312,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600145998391</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added hardware PID control and fixed a bug where resetting did not work properly">
+      <created>1600237318352</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1600237318352</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,7 +341,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Ported simulator code into FRCKit" />
     <MESSAGE value="Modified simulation to use protobuf instead of Java serialization.  Improves performance and scalability of code in the future." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified simulation to use protobuf instead of Java serialization.  Improves performance and scalability of code in the future." />
+    <MESSAGE value="Added hardware PID control and fixed a bug where resetting did not work properly" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added hardware PID control and fixed a bug where resetting did not work properly" />
   </component>
   <component name="WindowStateProjectService">
     <state x="930" y="457" key="#Other_File_Types" timestamp="1600117713473">
@@ -384,35 +365,35 @@
       <screen x="0" y="0" width="1280" height="689" />
     </state>
     <state x="270" y="34" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1280.689@0.0.1280.689" timestamp="1599623862324" />
-    <state width="2151" height="333" key="GridCell.Tab.0.bottom" timestamp="1600236575051">
+    <state width="2151" height="333" key="GridCell.Tab.0.bottom" timestamp="1600237326693">
       <screen x="0" y="0" width="2194" height="1204" />
     </state>
     <state width="2151" height="335" key="GridCell.Tab.0.bottom/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599798947507" />
     <state width="1237" height="166" key="GridCell.Tab.0.bottom/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
-    <state width="2151" height="333" key="GridCell.Tab.0.bottom/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600236575051" />
-    <state width="2151" height="333" key="GridCell.Tab.0.center" timestamp="1600236575051">
+    <state width="2151" height="333" key="GridCell.Tab.0.bottom/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600237326693" />
+    <state width="2151" height="333" key="GridCell.Tab.0.center" timestamp="1600237326693">
       <screen x="0" y="0" width="2194" height="1204" />
     </state>
     <state width="2151" height="335" key="GridCell.Tab.0.center/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599798947507" />
     <state width="1237" height="166" key="GridCell.Tab.0.center/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
-    <state width="2151" height="333" key="GridCell.Tab.0.center/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600236575051" />
-    <state width="2151" height="333" key="GridCell.Tab.0.left" timestamp="1600236575051">
+    <state width="2151" height="333" key="GridCell.Tab.0.center/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600237326693" />
+    <state width="2151" height="333" key="GridCell.Tab.0.left" timestamp="1600237326693">
       <screen x="0" y="0" width="2194" height="1204" />
     </state>
     <state width="2151" height="335" key="GridCell.Tab.0.left/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599798947507" />
     <state width="1237" height="166" key="GridCell.Tab.0.left/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
-    <state width="2151" height="333" key="GridCell.Tab.0.left/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600236575051" />
-    <state width="2151" height="333" key="GridCell.Tab.0.right" timestamp="1600236575051">
+    <state width="2151" height="333" key="GridCell.Tab.0.left/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600237326693" />
+    <state width="2151" height="333" key="GridCell.Tab.0.right" timestamp="1600237326693">
       <screen x="0" y="0" width="2194" height="1204" />
     </state>
     <state width="2151" height="335" key="GridCell.Tab.0.right/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599798947507" />
     <state width="1237" height="166" key="GridCell.Tab.0.right/0.0.1280.689@0.0.1280.689" timestamp="1599631559278" />
-    <state width="2151" height="333" key="GridCell.Tab.0.right/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600236575051" />
-    <state x="690" y="335" key="Vcs.Push.Dialog.v2" timestamp="1600146001856">
+    <state width="2151" height="333" key="GridCell.Tab.0.right/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600237326693" />
+    <state x="690" y="335" key="Vcs.Push.Dialog.v2" timestamp="1600237321401">
       <screen x="0" y="0" width="2194" height="1204" />
     </state>
     <state x="690" y="335" key="Vcs.Push.Dialog.v2/-1920.1056.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1599798942394" />
-    <state x="690" y="335" key="Vcs.Push.Dialog.v2/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600146001856" />
+    <state x="690" y="335" key="Vcs.Push.Dialog.v2/935.2160.1280.685/0.0.2194.1204/3840.0.1152.2018@0.0.2194.1204" timestamp="1600237321401" />
     <state x="355" y="0" key="new project wizard" timestamp="1599794642733">
       <screen x="0" y="0" width="2194" height="1204" />
     </state>

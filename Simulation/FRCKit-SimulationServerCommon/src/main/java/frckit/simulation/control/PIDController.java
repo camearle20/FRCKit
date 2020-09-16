@@ -69,7 +69,6 @@ public class PIDController {
         double error = setpoint - pv;
         double p = error * kP;
 
-        /*
         if (Math.abs(error) <= iZone || iZone == 0.0) {
             i = i + (error * kI);
         } else {
@@ -83,8 +82,6 @@ public class PIDController {
 
         double output = p + i + d + f;
 
-         */
-        return p;
-        //return Math.min(Math.max(output, minOutput), maxOutput); //Clamp the output
+        return Math.min(Math.max(output, minOutput), maxOutput); //Clamp the output
     }
 }
