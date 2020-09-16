@@ -14,12 +14,7 @@ import java.util.*;
 
 public class SimulationServerWebots {
     public static void main(String[] args) throws IOException, InterruptedException {
-        RobotCycle.MotorCommand DEFAULT_COMMAND = RobotCycle.MotorCommand.newBuilder()
-                .setVoltage(0.0)
-                .setControlType(RobotCycle.MotorCommand.ControlType.NONE)
-                .setCommand(0.0)
-                .build();
-
+        int resetCount = 0;
         ModelConfiguration config = ConfigurationLoader.load();
 
         SimulationServer server = new SimulationServer(config.serverPort);
@@ -40,8 +35,13 @@ public class SimulationServerWebots {
 
         //Main simulation loop
         while (sv.step(timestepMs) != -1) {
-            WorldUpdate.WorldUpdateMessage.Builder builder = WorldUpdate.WorldUpdateMessage.newBuilder();
+            if (resetCount > 0) {
+                resetCount--;
+                continue;
+            }
             double timestamp = sv.getTime();
+            WorldUpdate.WorldUpdateMessage.Builder builder = WorldUpdate.WorldUpdateMessage.newBuilder();
+
             builder.setTimestamp(timestamp);
             //Start by reading all sensors
             for (Map.Entry<Integer, WebotsTransmission> entry : transmissionsMap.entrySet()) {
@@ -51,7 +51,7 @@ public class SimulationServerWebots {
                 transmission.updateSensors(timestamp);
                 builder.putTransmissionEncoderStates(slot,
                         WorldUpdate.EncoderState.newBuilder()
-                                .setPosition(transmission.encoder.getPositionWithResolution())
+                                .setPosition(transmission.encoder.getPositionWithResolutionAndOffset())
                                 .setVelocity(transmission.encoder.getVelocity())
                                 .build()
                 );
@@ -62,19 +62,40 @@ public class SimulationServerWebots {
             if (robotCycleMessage.getResetWorldFlag()) {
                 //Reset now
                 System.out.println("Resetting simulation");
+                for (WebotsTransmission transmission : transmissionsMap.values()) {
+                    transmission.updateCommand(null);
+                    transmission.encoder.reset();
+                }
+                sv.simulationResetPhysics();
                 sv.simulationReset();
+                resetCount = 1;
                 continue; //Break this loop cycle now
             }
 
-            //Send torques to transmissions
-            for (Map.Entry<Integer, WebotsTransmission> entry: transmissionsMap.entrySet()) {
-                int slot = entry.getKey();
-                WebotsTransmission transmission = entry.getValue();
-
-                RobotCycle.MotorCommand message = robotCycleMessage.getMotorCommandsOrDefault(slot, DEFAULT_COMMAND);
-                double voltage = message.getVoltage();
-                transmission.applyTorque(voltage);
+            //Read commands in
+            for (RobotCycle.MotorCommand motorCommand : robotCycleMessage.getMotorCommandsList()) {
+                WebotsTransmission transmission = transmissionsMap.get(motorCommand.getSlot());
+                if (transmission != null) {
+                    transmission.updateCommand(motorCommand);
+                } else {
+                    System.out.println("WARNING: No transmission with slot #" + motorCommand.getSlot() + " for motor command.  Ignoring command.");
+                }
             }
+
+            //TODO pneumatics
+
+            for (RobotCycle.PIDConfigCommand pidConfigCommand : robotCycleMessage.getPidConfigCommandsList()) {
+                WebotsTransmission transmission = transmissionsMap.get(pidConfigCommand.getSlot());
+                if (transmission != null) {
+                    transmission.processPidConfigCommand(pidConfigCommand);
+                } else {
+                    System.out.println("WARNING: No transmission with slot #" + pidConfigCommand.getSlot() + " for PID config command.  Ignoring command.");
+                }
+            }
+
+            //Update transmissions
+            boolean enabled = robotCycleMessage.getIsEnabled();
+            transmissionsMap.values().forEach((t) -> t.updateMotor(enabled));
         }
         server.stop();
     }

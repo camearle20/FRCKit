@@ -2,9 +2,10 @@ package frckit.simulation.devices;
 
 
 import frckit.simulation.SimulationClient;
+import frckit.simulation.protocol.RobotCycle;
 
 public class SimStandaloneEncoder {
-    private int slot;
+    private final int slot;
 
     public SimStandaloneEncoder(int slot) {
         this.slot = slot;
@@ -16,5 +17,9 @@ public class SimStandaloneEncoder {
 
     public double getVelocityRadPerSec() {
         return SimulationClient.getInstance().getLastWorldUpdate().getStandaloneEncoderStatesOrThrow(slot).getVelocity();
+    }
+
+    public void setPositionRadians(double position) {
+        //TODO finish this (not in protocol yet)
     }
 }

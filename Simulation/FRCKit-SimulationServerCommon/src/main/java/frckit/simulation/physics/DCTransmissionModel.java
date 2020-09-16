@@ -5,7 +5,7 @@ package frckit.simulation.physics;
  * This is used to simulate the torque applied by the motor at each timestep given its velocity.
  */
 public class DCTransmissionModel {
-    private static final double EPSILON = 1e-6;
+    private static final double EPSILON = Math.ulp(1.0);
 
     private final double speedPerVolt;
     private final double torquePerVolt;

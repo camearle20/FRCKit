@@ -9,7 +9,7 @@ dependencies {
     implementation project(":Simulation:FRCKit-SimulationCommon")
 }
 
-    jar{
+    jar{ //TODO remove this
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }

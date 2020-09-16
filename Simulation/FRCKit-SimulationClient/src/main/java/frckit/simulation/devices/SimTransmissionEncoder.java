@@ -1,9 +1,10 @@
 package frckit.simulation.devices;
 
 import frckit.simulation.SimulationClient;
+import frckit.simulation.protocol.RobotCycle;
 
 public class SimTransmissionEncoder {
-    private int slot;
+    private final int slot;
 
     public SimTransmissionEncoder(int slot) {
         this.slot = slot;
@@ -15,5 +16,14 @@ public class SimTransmissionEncoder {
 
     public double getVelocityRadPerSec() {
         return SimulationClient.getInstance().getLastWorldUpdate().getTransmissionEncoderStatesOrThrow(slot).getVelocity();
+    }
+
+    public void setPositionRadians(double position) {
+        SimulationClient.getInstance().getCurrentCycleBuilder().addPidConfigCommands(
+                RobotCycle.PIDConfigCommand.newBuilder()
+                        .setSlot(slot)
+                        .setEncoderPosition(position)
+                        .build()
+        );
     }
 }

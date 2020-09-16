@@ -6,22 +6,40 @@ message RobotCycleMessage {
   bool resetWorldFlag = 1;
   bool isEnabled = 2;
 
-  map<int32, MotorCommand> motorCommands = 3;
-  map<int32, PneumaticsCommand> pneumaticsCommands = 4;
+  repeated MotorCommand motorCommands = 3;
+  repeated PneumaticsCommand pneumaticsCommands = 4;
+  repeated PIDConfigCommand pidConfigCommands = 5;
 }
 
 message MotorCommand {
+  int32 slot = 1;
+
   enum ControlType {
     NONE = 0;
     POSITION = 1;
     VELOCITY = 2;
   }
 
-  ControlType controlType = 1;
-  double command = 2;
-  double voltage = 3;
+  ControlType controlType = 2;
+  double command = 3;
+  double voltage = 4;
 }
 
 message PneumaticsCommand {
-  bool state = 1;
+  int32 slot = 1;
+  bool state = 2;
+}
+
+message PIDConfigCommand {
+  int32 slot = 1;
+  oneof setting {
+    double kP = 2;
+    double kI = 3;
+    double kD = 4;
+    double kF = 5;
+    double iZone = 6;
+    double minOutput = 7;
+    double maxOutput = 8;
+    double encoderPosition = 9;
+  }
 }

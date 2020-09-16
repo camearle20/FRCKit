@@ -54,8 +54,11 @@ public class ExternalSimLauncher {
 
         boolean errorOnExit = false;
         try {
+            client.receiveUpdateMessage(); //This blocks until webots is ready
+            client.createNewCycleBuilder();
             robot.robotInit();
             HAL.observeUserProgramStarting();
+            client.sendCycleMessage();
 
             //Need to use reflection here to get access to the "loopFunc" method
             //of IterativeRobotBase.  We could reimplement it here, but that just
@@ -66,8 +69,9 @@ public class ExternalSimLauncher {
 
             //Run the code forever
             while (!Thread.interrupted()) {
-                client.receiveUpdateMessage(); //This blocks until webots is ready
+                client.receiveUpdateMessage();
                 client.createNewCycleBuilder(); //Create a new cycle message for this cycle
+                client.setEnabled(robot.isEnabled()); //Report enabled state
                 loopFunc.invoke(robot); //This is the same as "robot.loopFunc()" but using reflection
                 client.sendCycleMessage(); //Send the response
             }

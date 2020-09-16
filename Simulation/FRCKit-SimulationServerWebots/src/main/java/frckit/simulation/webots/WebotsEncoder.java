@@ -4,6 +4,8 @@ package frckit.simulation.webots;
 import com.cyberbotics.webots.controller.Motor;
 import com.cyberbotics.webots.controller.PositionSensor;
 
+import java.util.Arrays;
+
 public class WebotsEncoder {
     private final PositionSensor positionSensor;
     private final double resolution;
@@ -13,6 +15,8 @@ public class WebotsEncoder {
     private double position;
     private double velocity;
 
+    private double offset = 0.0;
+
     public double getPosition() {
         return position;
     }
@@ -21,18 +25,34 @@ public class WebotsEncoder {
         return velocity;
     }
 
+    public void setNewPosition(double position) {
+        offset = position - getPositionWithResolution();
+    }
+
+    public double getPositionWithResolution() {
+        if (resolution == 0.0) {
+            return position; //Infinite resolution configured
+        } else if (position > 0) {
+            return Math.floor(position / resolution) * resolution;
+        } else if (position < 0) {
+            return Math.ceil(position / resolution) * resolution;
+        }
+        return 0.0;
+    }
+
     /**
      * Gets the position of the sensor, scaled based on the resolution of the sensor.
      * @return The "ticked" position of the sensor
      */
-    public double getPositionWithResolution() {
-        if (position > 0) {
-            return Math.floor(position / resolution) * resolution;
-        } else if (position < 0) {
-            return Math.ceil(position / resolution) * resolution;
-        } else {
-            return 0.0;
-        }
+    public double getPositionWithResolutionAndOffset() {
+        return getPositionWithResolution() + offset;
+    }
+
+    public void reset() {
+        lastTimestamp = 0.0;
+        lastPosition = 0.0;
+        position = 0.0;
+        velocity = 0.0;
     }
 
     /**

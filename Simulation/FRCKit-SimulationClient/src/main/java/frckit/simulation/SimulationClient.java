@@ -31,12 +31,10 @@ public class SimulationClient {
         return currentCycleBuilder;
     }
 
-    public WorldUpdate.WorldUpdateMessage receiveUpdateMessage() {
+    public void receiveUpdateMessage() {
         try {
             //Get and store update from simulator
-            WorldUpdate.WorldUpdateMessage messageIn = WorldUpdate.WorldUpdateMessage.parseDelimitedFrom(in);
-            lastWorldUpdate = messageIn;
-            return messageIn;
+            lastWorldUpdate = WorldUpdate.WorldUpdateMessage.parseDelimitedFrom(in);
         } catch (IOException e) {
             throw new RuntimeException("Invalid message from server", e);
         }
@@ -45,6 +43,10 @@ public class SimulationClient {
     public void createNewCycleBuilder() {
         //Create a new robotCycle message builder for this cycle
         currentCycleBuilder = RobotCycle.RobotCycleMessage.newBuilder();
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        currentCycleBuilder.setIsEnabled(isEnabled);
     }
 
     public void sendCycleMessage() {

@@ -12,8 +12,9 @@ public class SimSimpleMotorController {
 
     public void setOutputVoltage(double voltage) {
         RobotCycle.RobotCycleMessage.Builder builder = SimulationClient.getInstance().getCurrentCycleBuilder();
-        builder.putMotorCommands(slot,
+        builder.addMotorCommands(
                 RobotCycle.MotorCommand.newBuilder()
+                        .setSlot(slot)
                         .setControlType(RobotCycle.MotorCommand.ControlType.NONE)
                         .setCommand(0.0)
                         .setVoltage(voltage)
