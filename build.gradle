@@ -1,5 +1,12 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.0' apply false
+    id "eu.davidea.grabver" version "2.0.2"
+    id "com.jfrog.artifactory" version "4.17.2" apply false
+}
+
+versioning {
+    major 0
+    minor 0
 }
 
 def wpilibVersion = "2020.3.2"
@@ -11,6 +18,9 @@ allprojects {
 
 subprojects {
     apply plugin: "java-library"
+    sourceCompatibility = 1.8 //TODO can these become 1.11?
+    targetCompatibility = 1.8
+    version = versioning.name
 
     repositories {
         mavenCentral()
@@ -23,5 +33,10 @@ subprojects {
     dependencies {
         implementation "edu.wpi.first.wpilibj:wpilibj-java:$wpilibVersion"
         implementation "edu.wpi.first.hal:hal-java:$wpilibVersion"
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
     }
 }

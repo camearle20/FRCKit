@@ -1,6 +1,12 @@
+
+
 plugins {
     id "com.google.protobuf" version "0.8.13"
 }
+
+apply from: "${rootProject.projectDir}/gradle/publish.gradle"
+
+
 
 def protobufVersion = "3.13.0"
 

@@ -1,16 +1,7 @@
-plugins {
-    id 'java'
-}
 
-group 'frckit'
+apply from: "${rootProject.projectDir}/gradle/publish.gradle"
 
 dependencies {
     implementation project(":Libraries:FRCKit-DI")
     implementation project(":Simulation:FRCKit-SimulationCommon")
-}
-
-    jar{ //TODO remove this
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }

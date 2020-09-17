@@ -84,7 +84,10 @@ public class WebotsTransmission {
      * Simulates torque applied to the motor.
      */
     public void updateMotor(boolean enabled) {
-        if (command == null) motor.setTorque(0.0); //This occurs on the first cycle to reset all motors
+        if (command == null) {
+            motor.setTorque(0.0); //This occurs on the first cycle to reset all motors
+            return;
+        }
         double velocity = encoder.getVelocity();
         double position = encoder.getPositionWithResolutionAndOffset();
         double voltage;

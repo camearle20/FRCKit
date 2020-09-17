@@ -1,0 +1,56 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+
+// Build Javadoc Jars
+def javadocJarMap = [name: 'javadocJar', type: Jar, dependsOn: javadoc]
+project.tasks.create(javadocJarMap, {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    version = "${project.version}"
+})
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+// Artifacts to Publish
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+
+    repositories {
+        maven {
+            url =  "${artifactoryBaseUrl}/artifactory/devel"
+
+            credentials {
+                username = project.hasProperty('artifactoryUser') ? project.property('artifactoryUser') : "none"
+                password = project.hasProperty('artifactoryPass') ? project.property('artifactoryPass') : "none"
+            }
+        }
+    }
+}
+
+artifactory {
+    publish {
+        contextUrl = "${artifactoryBaseUrl}/artifactory"
+
+        repository {
+            repoKey = "devel"
+            username = project.hasProperty('artifactoryUser') ? project.property('artifactoryUser') : "none"
+            password = project.hasProperty('artifactoryPass') ? project.property('artifactoryPass') : "none"
+            maven = true
+        }
+
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+            publishPom = true
+        }
+    }
+}

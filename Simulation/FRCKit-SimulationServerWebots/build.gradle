@@ -1,3 +1,4 @@
+version = null
 
 dependencies {
     implementation project(":Simulation:FRCKit-SimulationServerCommon")
