@@ -1,6 +1,5 @@
 rootProject.name = 'FRCKit'
 
-include "Libraries:FRCKit-DI"
 include "Simulation:FRCKit-SimulationCommon"
 include "Simulation:FRCKit-SimulationClient"
 include "Simulation:FRCKit-SimulationServerCommon"

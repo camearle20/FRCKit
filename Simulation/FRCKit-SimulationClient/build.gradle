@@ -2,6 +2,5 @@
 apply from: "${rootProject.projectDir}/gradle/publish.gradle"
 
 dependencies {
-    implementation project(":Libraries:FRCKit-DI")
     implementation project(":Simulation:FRCKit-SimulationCommon")
 }

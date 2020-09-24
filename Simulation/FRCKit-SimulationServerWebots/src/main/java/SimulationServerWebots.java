@@ -15,6 +15,7 @@ import java.util.*;
 public class SimulationServerWebots {
     public static void main(String[] args) throws IOException, InterruptedException {
         int resetCount = 0;
+        boolean firstRun = true;
         ModelConfiguration config = ConfigurationLoader.load();
 
         SimulationServer server = new SimulationServer(config.serverPort);
@@ -41,7 +42,10 @@ public class SimulationServerWebots {
             }
             double timestamp = sv.getTime();
             WorldUpdate.WorldUpdateMessage.Builder builder = WorldUpdate.WorldUpdateMessage.newBuilder();
-
+            if (firstRun) {
+                builder.setSimulatorName(sv.getName()); //Send name to client only on first cycle
+                firstRun = false;
+            }
             builder.setTimestamp(timestamp);
             //Start by reading all sensors
             for (Map.Entry<Integer, WebotsTransmission> entry : transmissionsMap.entrySet()) {
@@ -69,6 +73,7 @@ public class SimulationServerWebots {
                 sv.simulationResetPhysics();
                 sv.simulationReset();
                 resetCount = 1;
+                firstRun = true;
                 continue; //Break this loop cycle now
             }
 

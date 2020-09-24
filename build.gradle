@@ -11,7 +11,7 @@ versioning {
 
 def wpilibVersion = "2020.3.2"
 
-allprojects {
+allprojects { project ->
     group 'frckit'
     apply plugin: 'idea'
 }

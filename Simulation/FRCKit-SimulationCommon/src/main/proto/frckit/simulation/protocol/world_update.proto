@@ -3,12 +3,13 @@ syntax = "proto3";
 package frckit.simulation.protocol;
 
 message WorldUpdateMessage {
-  double timestamp = 1;
+  string simulatorName = 1;
+  double timestamp = 2;
 
-  map<int32, EncoderState> transmissionEncoderStates = 2;
-  map<int32, EncoderState> standaloneEncoderStates = 3;
+  map<int32, EncoderState> transmissionEncoderStates = 3;
+  map<int32, EncoderState> standaloneEncoderStates = 4;
 
-  map<int32, VisionState> visionStates = 4;
+  map<int32, VisionState> visionStates = 5;
 }
 
 message EncoderState {

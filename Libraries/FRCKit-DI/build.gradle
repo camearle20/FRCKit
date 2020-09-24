@@ -1,6 +1,0 @@
-apply from: "${rootProject.projectDir}/gradle/publish.gradle"
-
-
-dependencies {
-    api group: 'com.google.inject', name: 'guice', version: '4.2.3'
-}

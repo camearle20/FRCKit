@@ -9,6 +9,7 @@ import java.net.Socket;
 public class SimulationClient {
     private final OutputStream out;
     private final InputStream in;
+    private String name;
 
     //Store the last instance so that device classes can get access
     private static SimulationClient lastInstance = null;
@@ -18,6 +19,27 @@ public class SimulationClient {
             throw new RuntimeException("No simulation client connected!  Did you use ExternalSimLauncher to launch your robot?");
         }
         return lastInstance;
+    }
+
+    /**
+     * Returns true if the running instance of the JVM is connected to an external simulator.
+     * @return True if the running code is connected to an external simulator, false otherwise.
+     */
+    public static boolean isExternalSim() {
+        return lastInstance != null;
+    }
+
+    /**
+     * Returns the name of the external simulator connected.
+     * @return The name of the simulator connected, or an empty string if no simulator is connected or the connected
+     * simulator is unnamed.
+     */
+    public static String getSimName() {
+        if (lastInstance != null) {
+            return lastInstance.name;
+        } else {
+            return "";
+        }
     }
 
     private WorldUpdate.WorldUpdateMessage lastWorldUpdate = null;
@@ -35,6 +57,9 @@ public class SimulationClient {
         try {
             //Get and store update from simulator
             lastWorldUpdate = WorldUpdate.WorldUpdateMessage.parseDelimitedFrom(in);
+            if (lastWorldUpdate.getSimulatorName() != null) {
+                this.name = lastWorldUpdate.getSimulatorName();
+            }
         } catch (IOException e) {
             throw new RuntimeException("Invalid message from server", e);
         }
@@ -62,9 +87,9 @@ public class SimulationClient {
             Socket socket = new Socket(serverAddress, serverPort);
             this.out = socket.getOutputStream();
             this.in = socket.getInputStream();
+            lastInstance = this;
         } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to server", e);
+            throw new RuntimeException("Unable to connect to server at " + serverAddress + ":" + serverPort, e);
         }
-        lastInstance = this;
     }
 }

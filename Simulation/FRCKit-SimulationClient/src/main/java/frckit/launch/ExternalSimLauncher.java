@@ -1,9 +1,5 @@
 package frckit.launch;
 
-import com.google.inject.Module;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobotBase;
@@ -11,9 +7,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frckit.simulation.SimulationClient;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Supplier;
 
 /**
  * This class allows users to launch robot code for use in an external simulation tool,
@@ -25,12 +19,12 @@ public class ExternalSimLauncher {
     private static boolean suppressExitWarningGlobal;
 
     //helper called by "launch"
-    private static void runRobot(Injector injector, Class<? extends IterativeRobotBase> robotClass, SimulationClient client) {
+    private static void runRobot(Class<? extends IterativeRobotBase> robotClass, SimulationClient client) {
         System.out.println("********** Robot program starting **********");
 
         IterativeRobotBase robot;
         try {
-            robot = injector.getInstance(robotClass);
+            robot = robotClass.getConstructor().newInstance();
         } catch (Throwable throwable) {
             Throwable cause = throwable.getCause();
             if (cause != null) {
@@ -101,8 +95,7 @@ public class ExternalSimLauncher {
         }
     }
 
-    public static void launch(String serverAddress, int port, Class<? extends IterativeRobotBase> robotClass, Module ... modules) {
-        Injector injector = Guice.createInjector(Stage.PRODUCTION, modules);
+    public static void launch(String serverAddress, int port, Class<? extends IterativeRobotBase> robotClass) {
         SimulationClient client = new SimulationClient(serverAddress, port);
 
         //A lot of this is referenced/copied from WPILib RobotBase, starting in "startRobot"
@@ -113,7 +106,7 @@ public class ExternalSimLauncher {
 
         if (HAL.hasMain()) {
             Thread thread = new Thread(() -> {
-                runRobot(injector, robotClass, client);
+                runRobot(robotClass, client);
                 HAL.exitMain();
             }, "robot main");
             thread.setDaemon(true);
@@ -132,7 +125,7 @@ public class ExternalSimLauncher {
                 Thread.currentThread().interrupt();
             }
         } else {
-            runRobot(injector, robotClass, client);
+            runRobot(robotClass, client);
         }
     }
 }
