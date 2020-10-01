@@ -70,6 +70,7 @@ public class SimulationServer {
         @Override
         public void run() {
             try {
+                socket.setTcpNoDelay(true);
                 OutputStream out = socket.getOutputStream();
                 InputStream in = socket.getInputStream();
 

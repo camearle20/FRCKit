@@ -85,6 +85,7 @@ public class SimulationClient {
     public SimulationClient(String serverAddress, int serverPort) {
         try {
             Socket socket = new Socket(serverAddress, serverPort);
+            socket.setTcpNoDelay(true);
             this.out = socket.getOutputStream();
             this.in = socket.getInputStream();
             lastInstance = this;
