@@ -14,8 +14,6 @@ dependencies {
     api "com.google.protobuf:protobuf-java:$protobufVersion"
     // https://mvnrepository.com/artifact/com.barchart.udt/barchart-udt-bundle
     api group: 'com.barchart.udt', name: 'barchart-udt-bundle', version: '2.3.0'
-// https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
-    api group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
 
 }
 
