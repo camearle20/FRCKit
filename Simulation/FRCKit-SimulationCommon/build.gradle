@@ -12,9 +12,6 @@ def protobufVersion = "3.13.0"
 
 dependencies {
     api "com.google.protobuf:protobuf-java:$protobufVersion"
-    // https://mvnrepository.com/artifact/com.barchart.udt/barchart-udt-bundle
-    api group: 'com.barchart.udt', name: 'barchart-udt-bundle', version: '2.3.0'
-
 }
 
 protobuf {
