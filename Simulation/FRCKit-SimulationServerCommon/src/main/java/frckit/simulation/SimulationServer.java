@@ -1,10 +1,12 @@
 package frckit.simulation;
 
+import com.barchart.udt.net.NetServerSocketUDT;
 import frckit.simulation.protocol.RobotCycle;
 import frckit.simulation.protocol.WorldUpdate;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
@@ -27,7 +29,8 @@ public class SimulationServer {
 
     private final Thread acceptClientsThread = new Thread(() -> {
         try {
-            ServerSocket server = new ServerSocket(port);
+            NetServerSocketUDT server = new NetServerSocketUDT();
+            server.bind(new InetSocketAddress("0.0.0.0", port), 256);
             System.out.println("Accepting clients on port " + server.getLocalPort());
             while (!Thread.interrupted()) {
                 Socket newClient = server.accept(); //Wait for a new client connection
@@ -70,7 +73,6 @@ public class SimulationServer {
         @Override
         public void run() {
             try {
-                socket.setTcpNoDelay(true);
                 OutputStream out = socket.getOutputStream();
                 InputStream in = socket.getInputStream();
 

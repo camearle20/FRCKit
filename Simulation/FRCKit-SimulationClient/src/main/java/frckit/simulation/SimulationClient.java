@@ -1,9 +1,12 @@
 package frckit.simulation;
 
+import com.barchart.udt.OptionUDT;
+import com.barchart.udt.net.NetSocketUDT;
 import frckit.simulation.protocol.RobotCycle;
 import frckit.simulation.protocol.WorldUpdate;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class SimulationClient {
@@ -84,8 +87,10 @@ public class SimulationClient {
 
     public SimulationClient(String serverAddress, int serverPort) {
         try {
-            Socket socket = new Socket(serverAddress, serverPort);
-            socket.setTcpNoDelay(true);
+            NetSocketUDT socket = new NetSocketUDT();
+            if (System.getProperty("os.name").contains("win"))
+                socket.socketUDT().setOption(OptionUDT.UDT_MSS, 1052);
+            socket.connect(new InetSocketAddress(serverAddress, serverPort));
             this.out = socket.getOutputStream();
             this.in = socket.getInputStream();
             lastInstance = this;
