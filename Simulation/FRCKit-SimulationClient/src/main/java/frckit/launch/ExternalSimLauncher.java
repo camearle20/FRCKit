@@ -14,9 +14,31 @@ import java.util.concurrent.locks.ReentrantLock;
  * specifically one supported by one of FRCKit's "connectors".  Currently, Webots is supported.
  */
 public class ExternalSimLauncher {
+    private static class StopException extends RuntimeException {}
+
     private static final ReentrantLock runMutex = new ReentrantLock();
     private static RobotBase robotCopy;
     private static boolean suppressExitWarningGlobal;
+
+    private static void receiveChecked(SimulationClient client) {
+        try {
+            client.receiveUpdateMessage();
+        } catch (Exception e) {
+            System.out.println("Simulation disconnected (" + e.getClass().getSimpleName() + ")");
+            suppressExitWarningGlobal = true;
+            throw new StopException();
+        }
+    }
+
+    private static void sendChecked(SimulationClient client) {
+        try {
+            client.sendCycleMessage();
+        } catch (Exception e) {
+            System.out.println("Simulation disconnected (" + e.getClass().getSimpleName() + ")");
+            suppressExitWarningGlobal = true;
+            throw new StopException();
+        }
+    }
 
     //helper called by "launch"
     private static void runRobot(Class<? extends IterativeRobotBase> robotClass, SimulationClient client) {
@@ -48,11 +70,11 @@ public class ExternalSimLauncher {
 
         boolean errorOnExit = false;
         try {
-            client.receiveUpdateMessage(); //This blocks until webots is ready
+            receiveChecked(client); //This blocks until webots is ready
             client.createNewCycleBuilder();
             robot.robotInit();
             HAL.observeUserProgramStarting();
-            client.sendCycleMessage();
+            sendChecked(client);
 
             //Need to use reflection here to get access to the "loopFunc" method
             //of IterativeRobotBase.  We could reimplement it here, but that just
@@ -63,20 +85,22 @@ public class ExternalSimLauncher {
 
             //Run the code forever
             while (!Thread.interrupted()) {
-                client.receiveUpdateMessage();
+                receiveChecked(client);
                 client.createNewCycleBuilder(); //Create a new cycle message for this cycle
                 client.setEnabled(robot.isEnabled()); //Report enabled state
                 loopFunc.invoke(robot); //This is the same as "robot.loopFunc()" but using reflection
-                client.sendCycleMessage(); //Send the response
+                sendChecked(client);
             }
         } catch (Throwable throwable) {
-            Throwable cause = throwable.getCause();
-            if (cause != null) {
-                throwable = cause;
+            if (!(throwable instanceof StopException)) {
+                Throwable cause = throwable.getCause();
+                if (cause != null) {
+                    throwable = cause;
+                }
+                DriverStation.reportError("Unhandled exception: " + throwable.toString(),
+                        throwable.getStackTrace());
+                errorOnExit = true;
             }
-            DriverStation.reportError("Unhandled exception: " + throwable.toString(),
-                    throwable.getStackTrace());
-            errorOnExit = true;
         } finally {
             runMutex.lock();
             boolean suppressExitWarning = suppressExitWarningGlobal;

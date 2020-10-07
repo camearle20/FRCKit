@@ -50,7 +50,7 @@ public class SimulationServer {
                 currentHandler.start();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); //Exceptions should not be happening here
         }
         if (currentHandler != null) {
             currentHandler.interrupt();
@@ -69,6 +69,7 @@ public class SimulationServer {
 
         @Override
         public void run() {
+            Exception reason = null;
             try {
                 socket.setTcpNoDelay(true);
                 OutputStream out = socket.getOutputStream();
@@ -84,11 +85,11 @@ public class SimulationServer {
                     recvQueue.put(response);
                 }
             } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+                reason = e;
             }
             if (!interrupted()) {
                 //We reached this point because something went wrong with the client.  This constitutes a disconnect.
-                onDisconnect(socket.getInetAddress());
+                onDisconnect(socket.getInetAddress(), reason);
             }
             currentHandler = null; //Delete the reference to this instance, should make this eligible for GC
         }
@@ -118,9 +119,13 @@ public class SimulationServer {
         System.out.println("Client '" + addr.getCanonicalHostName() + "' connected");
     }
 
-    private void onDisconnect(InetAddress addr) {
+    private void onDisconnect(InetAddress addr, Exception reason) {
         if (addr == null) return;
-        System.out.println("Client '" + addr.getCanonicalHostName() + "' disconnected");
+        if (reason != null) {
+            System.out.println("Client '" + addr.getCanonicalHostName() + "' disconnected (" + reason.getClass().getSimpleName() + ")");
+        } else {
+            System.out.println("Client '" + addr.getCanonicalHostName() + "' disconnected");
+        }
     }
 
     public void sendWorldUpdate(WorldUpdate.WorldUpdateMessage message) throws InterruptedException {
