@@ -50,12 +50,8 @@ public class SimulationServerWebots {
                 continue;
             }
             double timestamp = sv.getTime();
-            boolean sendCycle = firstRun || clientTimestepMs <= timestepMs || Math.round(timestamp * 1000) - lastSend >= clientTimestepMs;
+            boolean sendCycle = clientTimestepMs <= timestepMs || Math.round(timestamp * 1000) - lastSend >= clientTimestepMs;
             WorldUpdate.WorldUpdateMessage.Builder builder = WorldUpdate.WorldUpdateMessage.newBuilder();
-            if (firstRun) {
-                builder.setSimulatorName(sv.getName()); //Send name to client only on first cycle
-                firstRun = false;
-            }
             builder.setTimestamp(timestamp);
             //Start by reading all sensors
             for (Map.Entry<Integer, WebotsTransmission> entry : transmissionsMap.entrySet()) {
@@ -72,6 +68,10 @@ public class SimulationServerWebots {
             }
 
             if (sendCycle) {
+                if (firstRun) {
+                    builder.setSimulatorName(sv.getName()); //Send name to client only on first cycle
+                    firstRun = false;
+                }
                 lastSend = Math.round(timestamp * 1000);
                 server.sendWorldUpdate(builder.build());
                 RobotCycle.RobotCycleMessage robotCycleMessage = server.getRobotCycleMessage();

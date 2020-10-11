@@ -120,7 +120,20 @@ public class ExternalSimLauncher {
     }
 
     public static void launch(String serverAddress, int port, Class<? extends IterativeRobotBase> robotClass) {
-        SimulationClient client = new SimulationClient(serverAddress, port);
+        SimulationClient client = null;
+        for (int i = 1; i <= 10; i++) {
+            System.out.println("Connecting to simulation server at " + serverAddress + ":" + port + ", attempt " + i);
+            try {
+                client = new SimulationClient(serverAddress, port);
+                break;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        if (client == null) {
+            System.err.println("Unable to connect to server.");
+            return;
+        }
 
         //A lot of this is referenced/copied from WPILib RobotBase, starting in "startRobot"
         //Things not needed in simulation (usage reporting, etc.) are skipped
@@ -129,8 +142,9 @@ public class ExternalSimLauncher {
         }
 
         if (HAL.hasMain()) {
+            SimulationClient clientCopy = client;
             Thread thread = new Thread(() -> {
-                runRobot(robotClass, client);
+                runRobot(robotClass, clientCopy);
                 HAL.exitMain();
             }, "robot main");
             thread.setDaemon(true);
