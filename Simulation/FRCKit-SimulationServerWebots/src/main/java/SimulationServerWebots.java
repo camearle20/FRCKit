@@ -20,7 +20,7 @@ public class SimulationServerWebots {
         long lastSend = 0;
         ModelConfiguration config = ConfigurationLoader.load();
 
-        SimulationServer server = new SimulationServer(config.serverPort);
+        SimulationServer server = new SimulationServer(config.getActualServerPort());
         Supervisor sv = new Supervisor();
         int timestepMs = (int) Math.round(sv.getBasicTimeStep());
         int clientTimestepMs = config.robotCodeDtMs;
