@@ -11,6 +11,7 @@ public class ModelConfiguration {
     public int serverPort = 8889;
     public TransmissionConfig[] transmissions;
     public SensorConfig[] extraSensors;
+    public int[] inertialUnits = {};
 
     public int getActualServerPort() {
         if (serverPort > 0) return serverPort;

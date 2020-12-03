@@ -9,6 +9,7 @@ message RobotCycleMessage {
   repeated MotorCommand motorCommands = 3;
   repeated PneumaticsCommand pneumaticsCommands = 4;
   repeated PIDConfigCommand pidConfigCommands = 5;
+  repeated InertialCommand inertialCommands = 6;
 }
 
 message MotorCommand {
@@ -41,5 +42,12 @@ message PIDConfigCommand {
     double minOutput = 7;
     double maxOutput = 8;
     double encoderPosition = 9;
+  }
+}
+
+message InertialCommand {
+  int32 slot = 1;
+  oneof setting {
+    double yawPosition = 2;
   }
 }

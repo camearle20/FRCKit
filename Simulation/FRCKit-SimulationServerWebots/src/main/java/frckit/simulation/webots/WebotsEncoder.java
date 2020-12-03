@@ -53,6 +53,7 @@ public class WebotsEncoder {
         lastPosition = 0.0;
         position = 0.0;
         velocity = 0.0;
+        offset = 0.0;
     }
 
     /**

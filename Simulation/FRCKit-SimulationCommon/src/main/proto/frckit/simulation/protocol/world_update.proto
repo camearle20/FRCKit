@@ -10,6 +10,7 @@ message WorldUpdateMessage {
   map<int32, EncoderState> standaloneEncoderStates = 4;
 
   map<int32, VisionState> visionStates = 5;
+  map<int32, InertialState> inertialStates = 6;
 }
 
 message EncoderState {
@@ -22,4 +23,10 @@ message VisionState {
   double tx = 2;
   double ty = 3;
   repeated double tcornxy = 4;
+}
+
+message InertialState {
+  double roll = 1;
+  double pitch = 2;
+  double yaw = 3;
 }

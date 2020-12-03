@@ -1,10 +1,15 @@
 package frckit.launch;
 
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.IterativeRobotBase;
-import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.hal.sim.SimHooks;
+import edu.wpi.first.wpilibj.*;
 import frckit.simulation.SimulationClient;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.bytebuddy.implementation.MethodCall;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.locks.ReentrantLock;
@@ -38,6 +43,15 @@ public class ExternalSimLauncher {
             suppressExitWarningGlobal = true;
             throw new StopException();
         }
+    }
+
+    public static class TimestampProxy {
+        public static SimulationClient client;
+
+        public static long getFPGATime() {
+            return (long) (client.getLastWorldUpdate().getTimestamp() * 1000000);
+        }
+
     }
 
     //helper called by "launch"
@@ -134,6 +148,17 @@ public class ExternalSimLauncher {
             System.err.println("Unable to connect to server.");
             return;
         }
+
+        TimestampProxy.client = client;
+        //Redefine timestamp
+        ByteBuddyAgent.install();
+        new ByteBuddy()
+                .redefine(RobotController.class)
+                .method(ElementMatchers.named("getFPGATime"))
+                .intercept(MethodDelegation.to(TimestampProxy.class))
+                .make()
+                .load(RobotController.class.getClassLoader(), ClassReloadingStrategy.fromInstalledAgent());
+
 
         //A lot of this is referenced/copied from WPILib RobotBase, starting in "startRobot"
         //Things not needed in simulation (usage reporting, etc.) are skipped

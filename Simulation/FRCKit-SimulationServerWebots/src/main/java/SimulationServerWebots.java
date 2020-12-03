@@ -1,3 +1,4 @@
+import com.cyberbotics.webots.controller.InertialUnit;
 import com.cyberbotics.webots.controller.Motor;
 import com.cyberbotics.webots.controller.PositionSensor;
 import com.cyberbotics.webots.controller.Supervisor;
@@ -7,6 +8,7 @@ import frckit.simulation.modelconfig.ModelConfiguration;
 import frckit.simulation.modelconfig.TransmissionConfig;
 import frckit.simulation.protocol.RobotCycle;
 import frckit.simulation.protocol.WorldUpdate;
+import frckit.simulation.webots.WebotsInertialUnit;
 import frckit.simulation.webots.WebotsTransmission;
 
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class SimulationServerWebots {
         }
 
         HashMap<Integer, WebotsTransmission> transmissionsMap = new HashMap<>();
+        HashMap<Integer, WebotsInertialUnit> inertialUnitsMap = new HashMap<>();
 
         //Begin looking for components from the config
         for (TransmissionConfig transmissionConfig : config.transmissions) {
@@ -41,6 +44,12 @@ public class SimulationServerWebots {
             m.setTorque(0.0); //Disable motor's internal PID
             s.enable(timestepMs); //Enable sensor to match robot's timestep
             transmissionsMap.put(slot, new WebotsTransmission(m, s, transmissionConfig));
+        }
+
+        for (int slot : config.inertialUnits) {
+            InertialUnit iu = sv.getInertialUnit("inertialUnit" + slot);
+            iu.enable(timestepMs);
+            inertialUnitsMap.put(slot, new WebotsInertialUnit(iu));
         }
 
         //Main simulation loop
@@ -67,6 +76,20 @@ public class SimulationServerWebots {
                 );
             }
 
+            for (Map.Entry<Integer, WebotsInertialUnit> entry : inertialUnitsMap.entrySet()) {
+                int slot = entry.getKey();
+                WebotsInertialUnit unit = entry.getValue();
+                unit.update();
+
+                builder.putInertialStates(slot,
+                        WorldUpdate.InertialState.newBuilder()
+                        .setRoll(unit.getRoll())
+                        .setPitch(unit.getPitch())
+                        .setYaw(unit.getYawWithOffset())
+                        .build()
+                );
+            }
+
             if (sendCycle) {
                 if (firstRun) {
                     builder.setSimulatorName(sv.getName()); //Send name to client only on first cycle
@@ -81,6 +104,9 @@ public class SimulationServerWebots {
                     for (WebotsTransmission transmission : transmissionsMap.values()) {
                         transmission.updateCommand(null);
                         transmission.encoder.reset();
+                    }
+                    for (WebotsInertialUnit inertialUnit : inertialUnitsMap.values()) {
+                        inertialUnit.reset();
                     }
                     sv.simulationResetPhysics();
                     sv.simulationReset();
@@ -110,6 +136,15 @@ public class SimulationServerWebots {
                         System.out.println("WARNING: No transmission with slot #" + pidConfigCommand.getSlot() + " for PID config command.  Ignoring command.");
                     }
                 }
+                for (RobotCycle.InertialCommand inertialCommand : robotCycleMessage.getInertialCommandsList()) {
+                    WebotsInertialUnit unit = inertialUnitsMap.get(inertialCommand.getSlot());
+                    if (unit != null) {
+                        unit.processCommand(inertialCommand);
+                    } else {
+                        System.out.println("WARNING: No inertial unit with slot #" + inertialCommand.getSlot() + " for command.  Ignoring command.");
+                    }
+                }
+
                 enabled = robotCycleMessage.getIsEnabled();
             }
 

@@ -3,4 +3,10 @@ apply from: "${rootProject.projectDir}/gradle/publish.gradle"
 
 dependencies {
     implementation project(":Simulation:FRCKit-SimulationCommon")
+
+    // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
+    implementation group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.18'
+// https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
+    implementation group: 'net.bytebuddy', name: 'byte-buddy-agent', version: '1.10.18'
+
 }
