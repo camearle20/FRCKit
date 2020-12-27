@@ -1,0 +1,8 @@
+apply from: "${rootProject.projectDir}/gradle/publish.gradle"
+apply from: "../lib.gradle"
+
+dependencies {
+    implementation project(":lib:defaultgen")
+    // https://mvnrepository.com/artifact/com.squareup/javapoet
+    implementation group: 'com.squareup', name: 'javapoet', version: '1.13.0'
+}

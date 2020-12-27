@@ -1,5 +1,12 @@
 rootProject.name = 'FRCKit'
 
+new File("${rootProject.projectDir}/lib/").listFiles().each {
+    if (it.directory && new File(it, 'build.gradle').exists()) {
+        include ":lib:${it.name}"
+    }
+}
+
+
 include "Libraries:FRCKit-Util"
 include "Simulation:FRCKit-SimulationCommon"
 include "Simulation:FRCKit-SimulationClient"

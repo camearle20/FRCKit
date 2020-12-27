@@ -16,27 +16,29 @@ allprojects { project ->
     apply plugin: 'idea'
 }
 
-subprojects {
-    apply plugin: "java-library"
-    sourceCompatibility = 1.8 //TODO can these become 1.11?
-    targetCompatibility = 1.8
-    version = versioning.name
+subprojects { project ->
+    if (project.name != "lib") {
+        apply plugin: "java-library"
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        version = versioning.name
 
-    repositories {
-        mavenCentral()
+        repositories {
+            mavenCentral()
 
-        maven {
-            url "https://frcmaven.wpi.edu/artifactory/release"
+            maven {
+                url "https://frcmaven.wpi.edu/artifactory/release"
+            }
         }
-    }
 
-    dependencies {
-        implementation "edu.wpi.first.wpilibj:wpilibj-java:$wpilibVersion"
-        implementation "edu.wpi.first.hal:hal-java:$wpilibVersion"
-    }
+        dependencies {
+            implementation "edu.wpi.first.wpilibj:wpilibj-java:$wpilibVersion"
+            implementation "edu.wpi.first.hal:hal-java:$wpilibVersion"
+        }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
     }
 }
