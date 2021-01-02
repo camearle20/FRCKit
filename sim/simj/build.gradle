@@ -1,0 +1,21 @@
+plugins {
+    id 'application'
+}
+
+apply from: "${rootProject.projectDir}/gradle/publish.gradle"
+apply from: "../sim.gradle"
+
+
+dependencies {
+    implementation "org.openjfx:javafx-base:15.0.1:win"
+    implementation "org.openjfx:javafx-base:15.0.1:mac"
+    implementation "org.openjfx:javafx-base:15.0.1:linux"
+
+    implementation "org.openjfx:javafx-graphics:15.0.1:win"
+    implementation "org.openjfx:javafx-graphics:15.0.1:mac"
+    implementation "org.openjfx:javafx-graphics:15.0.1:linux"
+
+    implementation "org.openjfx:javafx-controls:15.0.1:win"
+    implementation "org.openjfx:javafx-controls:15.0.1:mac"
+    implementation "org.openjfx:javafx-controls:15.0.1:linux"
+}

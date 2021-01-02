@@ -16,8 +16,10 @@ allprojects { project ->
     apply plugin: 'idea'
 }
 
+def topLevelProjects = ["lib", "sim"]
+
 subprojects { project ->
-    if (project.name != "lib") {
+    if (!topLevelProjects.contains(project.name)) { //Do not apply java to top level (organization only) projects
         apply plugin: "java-library"
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

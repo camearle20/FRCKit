@@ -7,6 +7,12 @@ new File("${rootProject.projectDir}/lib/").listFiles().each {
 }
 
 
+new File("${rootProject.projectDir}/sim/").listFiles().each {
+    if (it.directory && new File(it, 'build.gradle').exists()) {
+        include ":sim:${it.name}"
+    }
+}
+
 include "Libraries:FRCKit-Util"
 include "Simulation:FRCKit-SimulationCommon"
 include "Simulation:FRCKit-SimulationClient"
