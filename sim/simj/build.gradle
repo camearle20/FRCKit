@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
 }
 
 apply from: "${rootProject.projectDir}/gradle/publish.gradle"
@@ -7,6 +8,10 @@ apply from: "../sim.gradle"
 
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    implementation "org.ode4j:core:0.4.0"
+
     implementation "org.openjfx:javafx-base:15.0.1:win"
     implementation "org.openjfx:javafx-base:15.0.1:mac"
     implementation "org.openjfx:javafx-base:15.0.1:linux"

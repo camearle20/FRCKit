@@ -1,5 +1,4 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.0' apply false
     id "eu.davidea.grabver" version "2.0.2"
     id "com.jfrog.artifactory" version "4.17.2" apply false
 }
