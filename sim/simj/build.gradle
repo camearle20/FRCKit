@@ -23,4 +23,8 @@ dependencies {
     implementation "org.openjfx:javafx-controls:15.0.1:win"
     implementation "org.openjfx:javafx-controls:15.0.1:mac"
     implementation "org.openjfx:javafx-controls:15.0.1:linux"
+
+    // https://mvnrepository.com/artifact/org.knowm.xchart/xchart
+    implementation group: 'org.knowm.xchart', name: 'xchart', version: '3.8.0'
+
 }
