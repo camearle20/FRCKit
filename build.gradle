@@ -8,14 +8,14 @@ versioning {
     minor 0
 }
 
-def wpilibVersion = "2020.3.2"
+def wpilibVersion = "2021.2.1"
 
 allprojects { project ->
     group 'frckit'
     apply plugin: 'idea'
 }
 
-def topLevelProjects = ["lib", "sim"]
+def topLevelProjects = ["lib", "sim", "tools"]
 
 subprojects { project ->
     if (!topLevelProjects.contains(project.name)) { //Do not apply java to top level (organization only) projects
@@ -34,6 +34,7 @@ subprojects { project ->
 
         dependencies {
             implementation "edu.wpi.first.wpilibj:wpilibj-java:$wpilibVersion"
+            implementation "edu.wpi.first.wpimath:wpimath-java:$wpilibVersion"
             implementation "edu.wpi.first.hal:hal-java:$wpilibVersion"
         }
 

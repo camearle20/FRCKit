@@ -13,6 +13,13 @@ new File("${rootProject.projectDir}/sim/").listFiles().each {
     }
 }
 
+new File("${rootProject.projectDir}/tools/").listFiles().each {
+    if (it.directory && new File(it, 'build.gradle').exists()) {
+        include ":tools:${it.name}"
+    }
+}
+
+
 include "Libraries:FRCKit-Util"
 include "Simulation:FRCKit-SimulationCommon"
 include "Simulation:FRCKit-SimulationClient"

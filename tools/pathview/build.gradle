@@ -1,0 +1,13 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+}
+
+apply from: "${rootProject.projectDir}/gradle/publish.gradle"
+apply from: "../tools.gradle"
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation project(":lib:util")
+
+    implementation "org.ejml:ejml-simple:0.38"
+}

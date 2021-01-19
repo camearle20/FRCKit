@@ -1,0 +1,2 @@
+apply from: "${rootProject.projectDir}/gradle/publish.gradle"
+apply from: "../lib.gradle"
