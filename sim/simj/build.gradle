@@ -6,6 +6,15 @@ plugins {
 apply from: "${rootProject.projectDir}/gradle/publish.gradle"
 apply from: "../sim.gradle"
 
+project.ext.set("nativeLibsDir", "$buildDir/libs/natives")
+
+configurations {
+    nativeBundle
+}
+
+application {
+    mainClassName "frckit.simulation.simj.SimJKt"
+}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
@@ -27,4 +36,22 @@ dependencies {
     // https://mvnrepository.com/artifact/org.knowm.xchart/xchart
     implementation group: 'org.knowm.xchart', name: 'xchart', version: '3.8.0'
 
+    // https://mvnrepository.com/artifact/net.java.jinput/jinput
+    implementation group: 'net.java.jinput', name: 'jinput', version: '2.0.9'
+    nativeBundle "net.java.jinput:jinput-platform:2.0.7:natives-windows"
+
+
+}
+
+task extractNativeBundle(type: Sync) {
+    from {
+        configurations.nativeBundle.collect { zipTree(it) }
+    }
+    into file(project.nativeLibsDir)
+}
+
+classes.dependsOn extractNativeBundle
+
+tasks.withType(JavaExec) {
+    systemProperty "java.library.path", project.nativeLibsDir
 }
