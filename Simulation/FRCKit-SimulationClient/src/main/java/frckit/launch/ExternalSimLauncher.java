@@ -1,7 +1,6 @@
 package frckit.launch;
 
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.sim.SimHooks;
 import edu.wpi.first.wpilibj.*;
 import frckit.simulation.SimulationClient;
 import net.bytebuddy.ByteBuddy;

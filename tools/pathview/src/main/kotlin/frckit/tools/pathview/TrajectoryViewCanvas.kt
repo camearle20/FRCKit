@@ -19,9 +19,7 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight: Double, val trajectory: Trajectory, val trackWidthMeters: Double): JPanel(true) {
-    private val M2I = 39.3701
-
+class TrajectoryViewCanvas(val ppi: Double, val fieldWidth: Double, val fieldHeight: Double, val trajectory: Trajectory, val trackWidthInches: Double, val markers: List<Translation2d>): JPanel(true) {
     private fun horizontalInchesToPixels(inches: Double): Int {
         return width - (ppi * inches).roundToInt()
     }
@@ -39,8 +37,8 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
             val state = trajectory.states[i]
             val dx = state.velocityMetersPerSecond
             val dtheta = state.velocityMetersPerSecond * state.curvatureRadPerMeter
-            val leftVelocity = abs(dx - (trackWidthMeters / 2.0 * dtheta))
-            val rightVelocity = abs(dx + (trackWidthMeters / 2.0 * dtheta))
+            val leftVelocity = abs(dx - (trackWidthInches / 2.0 * dtheta)) //Forward kinematics
+            val rightVelocity = abs(dx + (trackWidthInches / 2.0 * dtheta))
             if (leftVelocity > maxVel) maxVel = leftVelocity
             if (rightVelocity > maxVel) maxVel = rightVelocity
         }
@@ -95,7 +93,7 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
                 repaint()
             }
 
-            if (done) throw RuntimeException() //This is a hack to easily stop the task on the executor
+            if (done) throw RuntimeException("not a real exception - ignore") //This is a hack to easily stop the task on the executor
         }
     }
 
@@ -103,13 +101,13 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
 
     private val stats = computeStats()
     private val pathStroke = BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL)
-    private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters * M2I) / 2.0), Geom.ROT_I)
-    private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters * M2I) / -2.0), Geom.ROT_I)
-    private val frontTransform = Transform2d(Translation2d((trackWidthMeters * M2I) / 2.0, 0.0), Geom.ROT_I)
-    private val backTransform = Transform2d(Translation2d((trackWidthMeters * M2I) / -2.0, 0.0), Geom.ROT_I)
+    private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthInches) / 2.0), Geom.ROT_I)
+    private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthInches) / -2.0), Geom.ROT_I)
+    private val frontTransform = Transform2d(Translation2d((trackWidthInches) / 2.0, 0.0), Geom.ROT_I)
+    private val backTransform = Transform2d(Translation2d((trackWidthInches) / -2.0, 0.0), Geom.ROT_I)
 
     private fun drawRobot(g: Graphics2D) {
-        val currentPose = Pose2d(activeSimulation.latestState.translation.x * M2I, activeSimulation.latestState.translation.y * M2I, activeSimulation.latestState.rotation)
+        val currentPose = activeSimulation.latestState
         val horiz = horizontalInchesToPixels(currentPose.translation.y)
         val vert = verticalInchesToPixels(currentPose.translation.x)
 
@@ -155,7 +153,17 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
         g.fillRect(10, 60, 120, 10)
 
         g.color = Color.BLACK
-        g.drawString("${fmt.format(stats.maxVel)} m/s", 135, 70)
+        g.drawString("${fmt.format(stats.maxVel)} in/s", 135, 70)
+    }
+
+    private fun drawMarkers(g: Graphics2D) {
+        g.color = Color.MAGENTA
+
+        val offset = ((7 / 2) * ppi).roundToInt()
+        val size = (7 * ppi).roundToInt()
+        markers.forEach {
+            g.fillOval(horizontalInchesToPixels(it.y) - offset, verticalInchesToPixels(it.x) - offset, size, size)
+        }
     }
 
     private fun drawTrajectory(g: Graphics2D) {
@@ -164,8 +172,8 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
             val curState = trajectory.states[i]
             val lastState = trajectory.states[i - 1]
 
-            val curPose = Pose2d(curState.poseMeters.translation.x * M2I, curState.poseMeters.translation.y * M2I, curState.poseMeters.rotation)
-            val lastPose = Pose2d(lastState.poseMeters.translation.x * M2I, lastState.poseMeters.translation.y * M2I, lastState.poseMeters.rotation)
+            val curPose = curState.poseMeters //NOT METERS
+            val lastPose = lastState.poseMeters
 
             val curStateLeft = curPose.transformBy(leftTrackTransform)
             val lastStateLeft = lastPose.transformBy(leftTrackTransform)
@@ -187,10 +195,10 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
             val lastRightHoriz = horizontalInchesToPixels(lastStateRight.translation.y)
             val lastRightVert = verticalInchesToPixels(lastStateRight.translation.x)
 
-            val dx = curState.velocityMetersPerSecond
+            val dx = curState.velocityMetersPerSecond // in/s
             val dtheta = curState.velocityMetersPerSecond * curState.curvatureRadPerMeter
-            val leftVelocity = abs(dx - (trackWidthMeters / 2.0 * dtheta))
-            val rightVelocity = abs(dx + (trackWidthMeters / 2.0 * dtheta))
+            val leftVelocity = abs(dx - (trackWidthInches / 2.0 * dtheta))
+            val rightVelocity = abs(dx + (trackWidthInches / 2.0 * dtheta))
 
             val leftWeight = abs(leftVelocity) / stats.maxVel
             val rightWeight = abs(rightVelocity) / stats.maxVel
@@ -213,6 +221,7 @@ class TrajectoryViewCanvas(val ppi: Int, val fieldWidth: Double, val fieldHeight
         drawTrajectory(g2d)
         drawRobot(g2d)
         drawText(g2d)
+        drawMarkers(g2d)
     }
 
     fun startSimulation() {
