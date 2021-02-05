@@ -36,6 +36,7 @@ subprojects { project ->
             implementation "edu.wpi.first.wpilibj:wpilibj-java:$wpilibVersion"
             implementation "edu.wpi.first.wpimath:wpimath-java:$wpilibVersion"
             implementation "edu.wpi.first.hal:hal-java:$wpilibVersion"
+            implementation "edu.wpi.first.ntcore:ntcore-java:$wpilibVersion" //TODO move this into only pvision
         }
 
         task sourcesJar(type: Jar, dependsOn: classes) {
