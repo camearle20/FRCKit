@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class DualCornerVisionKinematics {
-    private Supplier<Optional<CornerPair>> cornerPairSupplier;
+    private final Supplier<Optional<CornerPair>> cornerPairSupplier;
 
     private double vpw = 2.0 * Math.tan(Math.toRadians(59.6 / 2.0));
     private double vph = 2.0 * Math.tan(Math.toRadians(49.7 / 2.0));
@@ -23,6 +23,7 @@ public class DualCornerVisionKinematics {
             double lensHeight,
             double goalHeight
     ) {
+        this.cornerPairSupplier = cornerPairSupplier;
         this.horizontalPlaneToLens = horizontalPlaneToLens;
         this.lensHeight = lensHeight;
         this.goalHeight = goalHeight;
