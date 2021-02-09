@@ -1,11 +1,9 @@
 package frckit.tools.pathview
 
-import edu.wpi.first.wpilibj.geometry.Pose2d
 import edu.wpi.first.wpilibj.geometry.Transform2d
 import edu.wpi.first.wpilibj.geometry.Translation2d
-import edu.wpi.first.wpilibj.geometry.Twist2d
 import edu.wpi.first.wpilibj.trajectory.Trajectory
-import frckit.util.Geom
+import frckit.util.GeomUtil
 import java.awt.*
 import java.lang.RuntimeException
 import java.text.DecimalFormat
@@ -58,7 +56,7 @@ class TrajectoryViewCanvas(val ppi: Double, val fieldWidth: Double, val fieldHei
         var startTime = 0.0
         var done = false
 
-        var latestState = Geom.POSE_I;
+        var latestState = GeomUtil.IDENTITY_POSE;
         var latestTime = 0.0
 
         fun start() {
@@ -101,10 +99,10 @@ class TrajectoryViewCanvas(val ppi: Double, val fieldWidth: Double, val fieldHei
 
     private val stats = computeStats()
     private val pathStroke = BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL)
-    private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthInches) / 2.0), Geom.ROT_I)
-    private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthInches) / -2.0), Geom.ROT_I)
-    private val frontTransform = Transform2d(Translation2d((trackWidthInches) / 2.0, 0.0), Geom.ROT_I)
-    private val backTransform = Transform2d(Translation2d((trackWidthInches) / -2.0, 0.0), Geom.ROT_I)
+    private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthInches) / 2.0), GeomUtil.IDENTITY_ROTATION)
+    private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthInches) / -2.0), GeomUtil.IDENTITY_ROTATION)
+    private val frontTransform = Transform2d(Translation2d((trackWidthInches) / 2.0, 0.0), GeomUtil.IDENTITY_ROTATION)
+    private val backTransform = Transform2d(Translation2d((trackWidthInches) / -2.0, 0.0), GeomUtil.IDENTITY_ROTATION)
 
     private fun drawRobot(g: Graphics2D) {
         val currentPose = activeSimulation.latestState
