@@ -20,7 +20,6 @@ new File("${rootProject.projectDir}/tools/").listFiles().each {
 }
 
 
-include "Libraries:FRCKit-Util"
 include "Simulation:FRCKit-SimulationCommon"
 include "Simulation:FRCKit-SimulationClient"
 include "Simulation:FRCKit-SimulationServerCommon"

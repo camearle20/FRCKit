@@ -1,9 +1,6 @@
 package frckit.util;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Transform2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.geometry.*;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
@@ -36,6 +33,22 @@ public class GeomUtil {
      * Applying the identity transform to a pose will result in the same pose.
      */
     public static final Transform2d IDENTITY_TRANSFORM = new Transform2d(IDENTITY_TRANSLATION, IDENTITY_ROTATION);
+
+    /**
+     * A Twist2d which represents the identity (zero) twist (dx=0, dy=0, dtheta=0)
+     */
+    public static final Twist2d IDENTITY_TWIST = new Twist2d();
+
+    /**
+     * Inverts a pose.  This is the same as inverting a Transform2d, but does not require converting to that.
+     * Useful for inverting the start of a kinematic chain
+     * @param pose The pose to invert
+     * @return The inverted pose
+     */
+    public static Pose2d poseInverse(Pose2d pose) {
+        Rotation2d rotationInverted = pose.getRotation().unaryMinus();
+        return new Pose2d(pose.getTranslation().unaryMinus().rotateBy(rotationInverted), rotationInverted);
+    }
 
     /**
      * Creates a pure translating transform
@@ -149,5 +162,15 @@ public class GeomUtil {
      */
     public static Pose2d metersToInches(Pose2d meters) {
         return new Pose2d(metersToInches(meters.getTranslation()), meters.getRotation());
+    }
+
+    public static void main(String[] args) {
+        Pose2d robotPose = new Pose2d(5.0, 10.0, Rotation2d.fromDegrees(30.0));
+        Pose2d targetPose = new Pose2d(6.0, 13.0, Rotation2d.fromDegrees(35.0));
+
+        System.out.println(poseInverse(robotPose).transformBy(poseToTransform(targetPose)));
+        System.out.println(targetPose.relativeTo(robotPose));
+
+        //System.out.println("test");
     }
 }
