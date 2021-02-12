@@ -28,4 +28,12 @@ public class DifferentialWheelCommand extends DifferentialWheelState {
                 state.rightAcceleration
         );
     }
+
+    public double getLeftVoltage() {
+        return leftVoltage;
+    }
+
+    public double getRightVoltage() {
+        return rightVoltage;
+    }
 }
