@@ -52,7 +52,11 @@ public class DynamicRamseteFollower {
     }
 
     public Pose2d getError() {
-        return error;
+        if (isInches) {
+            return GeomUtil.metersToInches(error);
+        } else {
+            return error;
+        }
     }
 
     public Trajectory.State getSetpoint() {
@@ -94,16 +98,19 @@ public class DynamicRamseteFollower {
 
         if (!done) {
             double linearVelocity, curvature;
+            Pose2d setpointPose;
             if (isInches) {
                 linearVelocity = Units.inchesToMeters(setpoint.velocityMetersPerSecond);
                 curvature = Units.metersToInches(setpoint.curvatureRadPerMeter); //This is not a mistake, since curvature is in^-1 we need to use the inverse conversion function
+                setpointPose = GeomUtil.inchesToMeters(setpoint.poseMeters);
             } else {
                 linearVelocity = setpoint.velocityMetersPerSecond;
                 curvature = setpoint.curvatureRadPerMeter;
+                setpointPose = setpoint.poseMeters;
             }
             double angularVelocity = linearVelocity * curvature;
 
-            error = setpoint.poseMeters.relativeTo(currentPose);
+            error = setpointPose.relativeTo(currentPose);
 
             //Ramsete algorithm
             double k = 2.0 * kZeta * Math.sqrt(kBeta * linearVelocity * linearVelocity + angularVelocity * angularVelocity);
