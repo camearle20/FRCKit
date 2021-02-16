@@ -1,7 +1,7 @@
-package frckit.physics.drivetrain;
+package frckit.physics.drivetrain.differential;
 
 import frckit.physics.DCMotorDynamics;
-import frckit.physics.RigidBodyState;
+import frckit.physics.state.RigidBodyState2d;
 
 public class DifferentialDrivetrainDynamics {
     private final double mass; //kg
@@ -186,51 +186,43 @@ public class DifferentialDrivetrainDynamics {
     }
 
     /**
-     * Performs inverse kinematics, which, given chassis velocity and acceleration (linear and angular), solves for the
-     * wheel velocities and accelerations (left and right) to produce the motion.
-     * @param chassisState The object which contains the chassis velocity and acceleration
-     * @return The object which contains the left and right wheel velocity accelerations
-     */
-    public DifferentialWheelState inverseKinematics(RigidBodyState chassisState) {
-        double v = chassisState.getVelocity().dx;
-        double omega = chassisState.getVelocity().dtheta;
-        double a = chassisState.getAcceleration().dx;
-        double alpha = chassisState.getAcceleration().dtheta;
-        return new DifferentialWheelState(
-                (v - effectiveWheelbaseRadius * omega) / wheelRadius,
-                (v + effectiveWheelbaseRadius * omega) / wheelRadius,
-                (a - effectiveWheelbaseRadius * alpha) / wheelRadius,
-                (a + effectiveWheelbaseRadius * alpha) / wheelRadius
-        );
-    }
-
-    /**
      * Performs inverse dynamics, which given desired chassis speed and acceleration (linear and angular), sovles for
      * the wheel velocities, accelerations, and voltages required to produce the motion.
      * @param chassisState The desired chassis state
      * @return The command which can be applied to the drive transmissions
      */
-    public DifferentialWheelCommand inverseDynamics(RigidBodyState chassisState) {
-        //Perform kinematics to get wheel velocity and acceleration
-        DifferentialWheelState wheelState = inverseKinematics(chassisState);
+    public DifferentialWheelState inverseDynamics(RigidBodyState2d chassisState) {
+        //Unpack data
+        double v = chassisState.getVx();
+        double omega = chassisState.getOmega();
+        double a = chassisState.getAx();
+        double alpha = chassisState.getAlpha();
 
-        //Unpack needed info
-        double chassisLinearAccel = chassisState.getAcceleration().dx;
-        double chassisAngularAccel = chassisState.getAcceleration().dtheta;
-        double chassisAngularVel = chassisState.getVelocity().dtheta; //Needed only for angular drag
+        //Do inverse kinematics
+        double leftWheelOmega = (v - effectiveWheelbaseRadius * omega) / wheelRadius;
+        double rightWheelOmega = (v + effectiveWheelbaseRadius * omega) / wheelRadius;
+        double leftWheelAlpha = (a - effectiveWheelbaseRadius * alpha) / wheelRadius;
+        double rightWheelAlpha = (a + effectiveWheelbaseRadius * alpha) / wheelRadius;
 
         //Compute required wheel torques
-        double leftWheelTorque = wheelRadius / 2.0 * (chassisLinearAccel * mass -
-                chassisAngularAccel * moi / effectiveWheelbaseRadius -
-                chassisAngularVel * angularDrag / effectiveWheelbaseRadius);
-        double rightWheelTorque = wheelRadius / 2.0 * (chassisLinearAccel * mass +
-                chassisAngularAccel * moi / effectiveWheelbaseRadius +
-                chassisAngularVel * angularDrag / effectiveWheelbaseRadius);
+        double leftWheelTorque = wheelRadius / 2.0 * (a * mass -
+                alpha * moi / effectiveWheelbaseRadius -
+                omega * angularDrag / effectiveWheelbaseRadius);
+        double rightWheelTorque = wheelRadius / 2.0 * (a * mass +
+                alpha * moi / effectiveWheelbaseRadius +
+                omega * angularDrag / effectiveWheelbaseRadius);
 
         //Solve for required voltages
-        double leftVoltage = leftTransmission.inverseDynamics(wheelState.leftVelocity, leftWheelTorque);
-        double rightVoltage = rightTransmission.inverseDynamics(wheelState.rightVelocity, rightWheelTorque);
+        double leftVoltage = leftTransmission.inverseDynamics(leftWheelOmega, leftWheelTorque);
+        double rightVoltage = rightTransmission.inverseDynamics(rightWheelOmega, rightWheelTorque);
 
-        return DifferentialWheelCommand.fromState(wheelState, leftVoltage, rightVoltage);
+        return new DifferentialWheelState(
+                leftWheelOmega,
+                rightWheelOmega,
+                leftWheelAlpha,
+                rightWheelAlpha,
+                leftVoltage,
+                rightVoltage
+        );
     }
 }
