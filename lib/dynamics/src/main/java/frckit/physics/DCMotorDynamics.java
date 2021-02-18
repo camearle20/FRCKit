@@ -92,13 +92,13 @@ public class DCMotorDynamics {
      */
     public double inverseDynamics(double speed, double torque) {
         double effectiveFrictionVoltage;
-        if (speed > 1e12) {
+        if (speed > 1e-12) {
             // Forward motion, rolling friction.
             effectiveFrictionVoltage = frictionVoltage;
         } else if (speed < -1e-12) {
             // Reverse motion, rolling friction.
             effectiveFrictionVoltage = -frictionVoltage;
-        } else if (torque > 1e12) {
+        } else if (torque > 1e-12) {
             // System is static, forward torque.
             effectiveFrictionVoltage = frictionVoltage;
         } else if (torque < -1e-12) {
