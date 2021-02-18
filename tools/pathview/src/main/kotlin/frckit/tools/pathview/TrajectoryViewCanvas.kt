@@ -15,42 +15,47 @@ import java.util.concurrent.TimeUnit
 import javax.swing.BorderFactory
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
-import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
+import kotlin.math.*
 
-class TrajectoryViewCanvas(val ppm: Double, val fieldWidth: Double, val fieldHeight: Double, val trajectory: Trajectory, val trackWidthMeters: Double, val markers: List<Translation2d>): JPanel(true) {
+class TrajectoryViewCanvas(var ppm: Double, val fieldWidth: Double, val fieldHeight: Double, trajectories: List<Trajectory>, val trackWidthMeters: Double, val markers: List<TrajectoryMarker>): JPanel(true) {
+    private val trajectory: Trajectory
+
     private var viewOffsetX = 0
     private var viewOffsetY = 0
+
+    private val origPpm = ppm
 
     fun resetView() {
         viewOffsetX = 0
         viewOffsetY = 0
+        ppm = origPpm
+        repaint()
+    }
+
+    fun zoom(zoomIn: Boolean) {
+        if (zoomIn) ppm += 25.0
+        else ppm -= 25.0
+        if (ppm < 0.0) ppm = 0.0 //Do not allow negative ppm (this inverts the view!)
         repaint()
     }
 
     private fun horizontalMetersToPixels(meters: Double): Int {
-        return width - (ppm * meters).roundToInt() + viewOffsetX
+        return (width - (ppm * meters) + viewOffsetX).roundToInt()
     }
 
     private fun verticalMetersToPixels(meters: Double): Int {
-        return height - (ppm * meters).roundToInt() + viewOffsetY
+        return (height - (ppm * meters) + viewOffsetY).roundToInt()
     }
 
     data class TrajectoryStats(val maxVel: Double, val time: Double)
 
     private fun computeStats(): TrajectoryStats {
-        var maxVel = 0.0
-
-        for (i in 0 until trajectory.states.size) {
-            val state = trajectory.states[i]
-            val dx = state.velocityMetersPerSecond
-            val dtheta = state.velocityMetersPerSecond * state.curvatureRadPerMeter
-            val leftVelocity = abs(dx - (trackWidthMeters / 2.0 * dtheta)) //Forward kinematics
-            val rightVelocity = abs(dx + (trackWidthMeters / 2.0 * dtheta))
-            if (leftVelocity > maxVel) maxVel = leftVelocity
-            if (rightVelocity > maxVel) maxVel = rightVelocity
+        val maxVel = trajectory.states.maxOf { //Maximum of wheel speeds in a single trajectory
+            val v = it.velocityMetersPerSecond
+            val omega = it.velocityMetersPerSecond * it.curvatureRadPerMeter
+            val leftVelocity = abs(v - (trackWidthMeters / 2.0 * omega)) //Forward kinematics
+            val rightVelocity = abs(v + (trackWidthMeters / 2.0 * omega))
+            max(leftVelocity, rightVelocity)
         }
 
         val time = trajectory.totalTimeSeconds
@@ -91,8 +96,8 @@ class TrajectoryViewCanvas(val ppm: Double, val fieldWidth: Double, val fieldHei
         //Updates the simulation
         private fun update() {
             var time = timeSeconds() - startTime
-            if (time > trajectory.totalTimeSeconds) {
-                time = trajectory.totalTimeSeconds
+            if (time > stats.time) {
+                time = stats.time
                 done = true
             }
             val state = trajectory.sample(time)
@@ -109,7 +114,7 @@ class TrajectoryViewCanvas(val ppm: Double, val fieldWidth: Double, val fieldHei
 
     private var activeSimulation = Simulation(1.0)
 
-    private val stats = computeStats()
+    private val stats: TrajectoryStats
     private val pathStroke = BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL)
     private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters) / 2.0), GeomUtil.IDENTITY_ROTATION)
     private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters) / -2.0), GeomUtil.IDENTITY_ROTATION)
@@ -168,12 +173,11 @@ class TrajectoryViewCanvas(val ppm: Double, val fieldWidth: Double, val fieldHei
     }
 
     private fun drawMarkers(g: Graphics2D) {
-        g.color = Color.MAGENTA
-
-        val offset = ((0.1778 / 2) * ppm).roundToInt()
-        val size = (0.1778 * ppm).roundToInt()
         markers.forEach {
-            g.fillOval(horizontalMetersToPixels(it.y) - offset, verticalMetersToPixels(it.x) - offset, size, size)
+            g.color = it.color
+            val offset = ((it.diameterMeters / 2.0) * ppm).roundToInt()
+            val size = (it.diameterMeters * ppm).roundToInt()
+            g.fillOval(horizontalMetersToPixels(it.position.y) - offset, verticalMetersToPixels(it.position.x) - offset, size, size)
         }
     }
 
@@ -275,6 +279,28 @@ class TrajectoryViewCanvas(val ppm: Double, val fieldWidth: Double, val fieldHei
     init {
         preferredSize = Dimension(ceil(fieldWidth * ppm).toInt(), ceil(fieldHeight * ppm).toInt())
         border = BorderFactory.createLineBorder(Color.BLACK, 1)
+
+        val states = arrayListOf<Trajectory.State>()
+        var timeOffset = 0.0
+        //Populate states array
+        trajectories.forEach {
+            trajectory ->
+            states.addAll(trajectory.states.map {
+                Trajectory.State(
+                    it.timeSeconds + timeOffset, //Offset the time by the accumulated time of the previous trajectories
+                    it.velocityMetersPerSecond,
+                    it.accelerationMetersPerSecondSq,
+                    it.poseMeters,
+                    it.curvatureRadPerMeter
+                )
+            })
+            timeOffset += trajectory.totalTimeSeconds //Add this segment's time to the time offset
+        }
+
+        //Create a new trajectory which combines all the sub-trajectories
+        trajectory = Trajectory(states)
+        stats = computeStats()
+
         resetSimulation()
         addMouseListener(object : MouseListener {
             override fun mouseClicked(e: MouseEvent?) {
