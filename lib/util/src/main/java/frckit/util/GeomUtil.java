@@ -164,13 +164,24 @@ public class GeomUtil {
         return new Pose2d(metersToInches(meters.getTranslation()), meters.getRotation());
     }
 
-    public static void main(String[] args) {
-        Pose2d robotPose = new Pose2d(5.0, 10.0, Rotation2d.fromDegrees(30.0));
-        Pose2d targetPose = new Pose2d(6.0, 13.0, Rotation2d.fromDegrees(35.0));
-
-        System.out.println(poseInverse(robotPose).transformBy(poseToTransform(targetPose)));
-        System.out.println(targetPose.relativeTo(robotPose));
-
-        //System.out.println("test");
+    /**
+     * Interpolates between two poses based on the scale factor t.  For example, t=0 would result in the first pose,
+     * t=1 would result in the last pose, and t=0.5 would result in a pose which is exactly halfway between the two
+     * poses.  Values of t less than zero return the first pose, and values of t greater than 1 return the last pose.
+     * @param lhs The left hand side, or first pose to use for interpolation
+     * @param rhs The right hand side, or last pose to use for interpolation
+     * @param t The scale factor, 0 <= t <= 1
+     * @return The pose which represents the interpolation.  For t <= 0, the "lhs" parameter is returned directly.
+     *         For t >= 1, the "rhs" parameter is returned directly.
+     */
+    public static Pose2d interpolate(Pose2d lhs, Pose2d rhs, double t) {
+        if (t <= 0) {
+            return lhs;
+        } else if (t >= 1) {
+            return rhs;
+        }
+        Twist2d twist = lhs.log(rhs);
+        Twist2d scaled = new Twist2d(twist.dx * t, twist.dy * t, twist.dtheta * t);
+        return lhs.exp(scaled);
     }
 }
