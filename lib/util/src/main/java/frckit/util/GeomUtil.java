@@ -184,4 +184,13 @@ public class GeomUtil {
         Twist2d scaled = new Twist2d(twist.dx * t, twist.dy * t, twist.dtheta * t);
         return lhs.exp(scaled);
     }
+
+    /**
+     * Returns the direction that this translation makes with the origin as a Rotation2d
+     * @param translation The translation
+     * @return The direction of the translation
+     */
+    public static Rotation2d direction(Translation2d translation) {
+        return new Rotation2d(translation.getX(), translation.getY());
+    }
 }
