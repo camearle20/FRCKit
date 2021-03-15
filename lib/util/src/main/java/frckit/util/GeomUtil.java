@@ -15,29 +15,29 @@ public class GeomUtil {
      * A Translation2d which represents the identity (zero) translation (x=0, y=0)
      * Applying the identity translation to a translation or a pose will result in the same translation or pose.
      */
-    public static final Translation2d IDENTITY_TRANSLATION = new Translation2d();
+    public static final Translation2d TRANSLATION_ZERO = new Translation2d();
 
     /**
      * A Rotation2d which represents the identity (zero) rotation (theta=0)
      * Applying the identity rotation to a translation, rotation, or pose will result in the same translation, rotation, or pose.
      */
-    public static final Rotation2d IDENTITY_ROTATION = new Rotation2d();
+    public static final Rotation2d ROTATION_ZERO = new Rotation2d();
 
     /**
      * A Pose2d which represents the identity (origin) pose (x=0, y=0, theta=0)
      */
-    public static final Pose2d IDENTITY_POSE = new Pose2d(IDENTITY_TRANSLATION, IDENTITY_ROTATION);
+    public static final Pose2d POSE_ZERO = new Pose2d(TRANSLATION_ZERO, ROTATION_ZERO);
 
     /**
      * A Transform2d which represents the identity (zero) transform (x=0, y=0, theta=0)
      * Applying the identity transform to a pose will result in the same pose.
      */
-    public static final Transform2d IDENTITY_TRANSFORM = new Transform2d(IDENTITY_TRANSLATION, IDENTITY_ROTATION);
+    public static final Transform2d TRANSFORM_ZERO = new Transform2d(TRANSLATION_ZERO, ROTATION_ZERO);
 
     /**
      * A Twist2d which represents the identity (zero) twist (dx=0, dy=0, dtheta=0)
      */
-    public static final Twist2d IDENTITY_TWIST = new Twist2d();
+    public static final Twist2d TWIST_ZERO = new Twist2d();
 
     /**
      * Inverts a pose.  This is the same as inverting a Transform2d, but does not require converting to that.
@@ -56,7 +56,7 @@ public class GeomUtil {
      * @return The resulting transform
      */
     public static Transform2d transformFromTranslation(Translation2d translation) {
-        return new Transform2d(translation, IDENTITY_ROTATION);
+        return new Transform2d(translation, ROTATION_ZERO);
     }
 
     /**
@@ -65,7 +65,7 @@ public class GeomUtil {
      * @return The resulting transform
      */
     public static Transform2d transformFromRotation(Rotation2d rotation) {
-        return new Transform2d(IDENTITY_TRANSLATION, rotation);
+        return new Transform2d(TRANSLATION_ZERO, rotation);
     }
 
     /**
@@ -74,7 +74,7 @@ public class GeomUtil {
      * @return The resulting pose
      */
     public static Pose2d poseFromTranslation(Translation2d translation) {
-        return new Pose2d(translation, IDENTITY_ROTATION);
+        return new Pose2d(translation, ROTATION_ZERO);
     }
 
     /**
@@ -83,7 +83,7 @@ public class GeomUtil {
      * @return The resulting pose
      */
     public static Pose2d poseFromRotation(Rotation2d rotation) {
-        return new Pose2d(IDENTITY_TRANSLATION, rotation);
+        return new Pose2d(TRANSLATION_ZERO, rotation);
     }
 
     /**

@@ -16,7 +16,7 @@ public class DrivetrainTrajectoryFollower {
     private boolean done = false;
     private RigidBodyState2d targetState = RigidBodyState2d.ZERO;
 
-    private Pose2d error = GeomUtil.IDENTITY_POSE;
+    private Pose2d error = GeomUtil.POSE_ZERO;
 
     public DrivetrainTrajectoryFollower(Trajectory trajectory, DrivetrainFeedback feedback) {
         this.trajectory = trajectory;

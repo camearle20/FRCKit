@@ -73,7 +73,7 @@ class TrajectoryViewCanvas(var ppm: Double, val fieldWidth: Double, val fieldHei
         var startTime = 0.0
         var done = false
 
-        var latestState = GeomUtil.IDENTITY_POSE;
+        var latestState = GeomUtil.POSE_ZERO;
         var latestTime = 0.0
 
         fun start() {
@@ -116,10 +116,10 @@ class TrajectoryViewCanvas(var ppm: Double, val fieldWidth: Double, val fieldHei
 
     private val stats: TrajectoryStats
     private val pathStroke = BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL)
-    private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters) / 2.0), GeomUtil.IDENTITY_ROTATION)
-    private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters) / -2.0), GeomUtil.IDENTITY_ROTATION)
-    private val frontTransform = Transform2d(Translation2d((trackWidthMeters) / 2.0, 0.0), GeomUtil.IDENTITY_ROTATION)
-    private val backTransform = Transform2d(Translation2d((trackWidthMeters) / -2.0, 0.0), GeomUtil.IDENTITY_ROTATION)
+    private val leftTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters) / 2.0), GeomUtil.ROTATION_ZERO)
+    private val rightTrackTransform = Transform2d(Translation2d(0.0, (trackWidthMeters) / -2.0), GeomUtil.ROTATION_ZERO)
+    private val frontTransform = Transform2d(Translation2d((trackWidthMeters) / 2.0, 0.0), GeomUtil.ROTATION_ZERO)
+    private val backTransform = Transform2d(Translation2d((trackWidthMeters) / -2.0, 0.0), GeomUtil.ROTATION_ZERO)
 
     private fun drawRobot(g: Graphics2D) {
         val currentPose = activeSimulation.latestState
