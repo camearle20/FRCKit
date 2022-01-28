@@ -1,8 +1,8 @@
 package frckit.tools.pathview
 
-import edu.wpi.first.wpilibj.geometry.Transform2d
-import edu.wpi.first.wpilibj.geometry.Translation2d
-import edu.wpi.first.wpilibj.trajectory.Trajectory
+import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.trajectory.Trajectory
 import frckit.util.GeomUtil
 import java.awt.*
 import java.awt.event.MouseEvent

@@ -1,7 +1,8 @@
 package frckit.util;
 
-import edu.wpi.first.wpilibj.geometry.*;
-import edu.wpi.first.wpilibj.util.Units;
+
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.util.Units;
 
 /**
  * Geometry utilities for working with translations, rotations, transforms, and poses.  Provides the following features:
@@ -170,9 +171,9 @@ public class GeomUtil {
      * poses.  Values of t less than zero return the first pose, and values of t greater than 1 return the last pose.
      * @param lhs The left hand side, or first pose to use for interpolation
      * @param rhs The right hand side, or last pose to use for interpolation
-     * @param t The scale factor, 0 <= t <= 1
-     * @return The pose which represents the interpolation.  For t <= 0, the "lhs" parameter is returned directly.
-     *         For t >= 1, the "rhs" parameter is returned directly.
+     * @param t The scale factor, between 0 and 1, inclusive
+     * @return The pose which represents the interpolation.  For t less than 0, the "lhs" parameter is returned directly.
+     *         For t greater than or equal to 1, the "rhs" parameter is returned directly.
      */
     public static Pose2d interpolate(Pose2d lhs, Pose2d rhs, double t) {
         if (t <= 0) {

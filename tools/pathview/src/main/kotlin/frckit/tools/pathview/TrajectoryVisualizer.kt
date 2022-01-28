@@ -1,24 +1,11 @@
 package frckit.tools.pathview
 
-import edu.wpi.first.wpilibj.trajectory.Trajectory
+import edu.wpi.first.math.trajectory.Trajectory
+import edu.wpi.first.math.util.Units
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.*
 import kotlin.system.exitProcess
-import edu.wpi.first.wpilibj.geometry.Rotation2d
-
-import edu.wpi.first.wpilibj.geometry.Pose2d
-import edu.wpi.first.wpilibj.geometry.Transform2d
-
-import edu.wpi.first.wpilibj.geometry.Translation2d
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
-
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator
-
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig
-import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveKinematicsConstraint
-import edu.wpi.first.wpilibj.util.Units
 import frckit.util.GeomUtil
 import java.awt.Color
 

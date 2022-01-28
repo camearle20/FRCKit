@@ -8,7 +8,7 @@ versioning {
     minor 0
 }
 
-def wpilibVersion = "2021.2.1"
+def wpilibVersion = "2022.2.1"
 
 allprojects { project ->
     group 'frckit'

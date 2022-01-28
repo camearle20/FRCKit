@@ -1,7 +1,5 @@
 package frckit.physics.state;
 
-import edu.wpi.first.wpilibj.geometry.Twist2d;
-import frckit.util.GeomUtil;
 
 /**
  * Represents the state of a rigid body, such as a drivetrain or other mechanism, in terms of its velocity and acceleration

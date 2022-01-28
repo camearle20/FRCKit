@@ -1,6 +1,6 @@
 package frckit.physics.drivetrain.follower;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import frckit.physics.state.RigidBodyState2d;
 
 /**

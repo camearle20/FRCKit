@@ -1,7 +1,7 @@
 package frckit.vision;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import frckit.vision.corner.Corner;
 import frckit.vision.corner.CornerPair;
 
